@@ -1,0 +1,75 @@
+@use "../../../shared/styles/bootstrap_overrides";
+@import '../../../shared/styles/colors';
+@import "~bootstrap/scss/mixins/breakpoints";
+
+$accordion-height: 172px;
+
+.main {
+    height: calc(100vh - $accordion-height );
+    max-height: calc(100vh - $accordion-height);
+    overflow: auto;
+}
+
+.accrordion-panel-wrapper {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+
+    @include media-breakpoint-up(md, bootstrap_overrides.$grid-breakpoints) {
+        left: 235px;
+        width: calc(100% - 235px);
+    }
+
+    @include media-breakpoint-up(lg, bootstrap_overrides.$grid-breakpoints) {
+        left: 235px;
+        width: calc(100% - 235px);
+    }
+
+    @include media-breakpoint-up(xl, bootstrap_overrides.$grid-breakpoints) {
+        left: 315px;
+        width: calc(100% - 315px);
+    }
+
+    @include media-breakpoint-up(xxl, bootstrap_overrides.$grid-breakpoints) {
+        left: 315px;
+        width: calc(100% - 315px);
+    }
+}
+
+gp-accordion-panel {
+    background-color: rgba(10, 51, 112, 1);
+    ::ng-deep {
+        .gp-accordion-panel-header {
+        .gp-accordion-panel-header-title-group  {
+            .gp-accordion-panel-title {
+                    color: rgba(255, 255, 255, 1);
+                }
+            }
+        }
+    }
+
+    ::ng-deep {
+        .gp-accordion-panel-header:hover {
+            .gp-accordion-panel-header-title-group  {
+                .gp-accordion-panel-title {
+                        color: rgba(255, 255, 255, 1);
+                    }
+                }
+            }
+    }
+
+    ::ng-deep {
+        .gp-accordion-panel-header:active
+        .gp-accordion-panel-title,
+        .gp-accordion-panel-header.expanded .gp-accordion-panel-title {
+            color: rgb(255, 255, 255) !important;
+        }
+    }
+
+    ::ng-deep {
+        .gp-accordion-panel-contentwrapper {
+            background-color: rgba(235, 246, 247, 1);
+        }
+    }
+}
