@@ -5,6 +5,9 @@
 $accordion-height: 172px;
 
 .main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: calc(100vh - $accordion-height );
     max-height: calc(100vh - $accordion-height);
     overflow: auto;
