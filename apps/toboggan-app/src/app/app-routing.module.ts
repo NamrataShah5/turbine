@@ -42,6 +42,12 @@ const routes: Routes = [
       import('./prior-experiences/prior-experiences.module').then((m) => m.PriorExperiencesModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'staff-profile/:id',
+    loadChildren: () =>
+      import('./staff-profile/staff-profile.module').then((m) => m.StaffProfileModule),
+    canActivate: [AuthGuard],
+  },
   // default page is user, change as we may see fit in the future
   { path: '**', redirectTo: '/user' },
 ];

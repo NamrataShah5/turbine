@@ -1,0 +1,13 @@
+<gp-page [loggedin]="true">
+    <toboggan-ws-banner></toboggan-ws-banner>
+    <toboggan-ws-modal-alert></toboggan-ws-modal-alert>
+    <h1 *ngIf="profile">{{profile.preferredName}} <span class="gp-level-6">({{profile.preferredPronoun}})</span></h1>
+    <gp-tabs>
+      <gp-tab label="Personal">
+        <toboggan-ws-personal-tab [profile]="profile"></toboggan-ws-personal-tab>
+      </gp-tab>
+      <gp-tab label="Contact">
+        <toboggan-ws-contact-tab [profile]="profile"></toboggan-ws-contact-tab>
+      </gp-tab>
+    </gp-tabs>
+</gp-page>

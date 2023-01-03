@@ -1,0 +1,98 @@
+<div class="personal-details">
+	<form [formGroup]="personalDetailsForm">
+		<div class="name-container">
+			<div class="field-name">
+				<div>First name</div>
+				<div class="field-value">
+					{{ personalDetailsForm.get('firstName')?.value }}
+				</div>
+			</div>
+
+			<div class="field-name">
+				<div>Last name</div>
+				<div class="field-value">
+					{{ personalDetailsForm.get('lastName')?.value }}
+				</div>
+			</div>
+		</div>
+		<div class="details-container">
+			<div class="field-name">
+				<div class="name-label">
+					<span>Preferred name</span>
+					<button gp-button
+						gp-tooltip="{{toolTips.preferredName}}"
+						gp-tooltip-placement="bottom" iconId="gp-icon-info" styleType="tertiary" iconVariations="icononly"></button>
+				</div>
+				<div *ngIf="!editMode">
+					<div class="field-value">
+						{{ personalDetailsForm.get('preferredName')?.value || '--None entered--' }}
+					</div>
+				</div>
+				<div *ngIf="editMode" class="name-input">
+					<p class="name-info">Do you prefer to be called something other than your legal first name?</p>
+					<gp-input size="default" [withIcon]="false" [error]="hasError('preferredName')" [errorMessage]="getErrorMessage('preferredName')">
+						<input aria-label="input" placeholder="Preferred name" type="text" formControlName="preferredName" />
+					</gp-input>
+				</div>
+			</div>
+			<div class="field-name">
+				<div class="pronoun-label">
+					<span>Pronouns</span>
+					<button gp-button
+						gp-tooltip="{{toolTips.preferredPronoun}}"
+						gp-tooltip-placement="bottom" iconId="gp-icon-info" styleType="tertiary" iconVariations="icononly"></button>
+				</div>
+				<div *ngIf="!editMode">
+					<div class="field-value">
+						{{ personalDetailsForm.get('preferredPronoun')?.value || '--None entered--' }}
+					</div>
+				</div>
+				<div *ngIf="editMode">
+					<p class="name-info">How should others refer to you?</p>
+					<gp-input size="default" [withIcon]="false">
+						<input aria-label="input" placeholder="Preferred Pronoun" type="text" formControlName="preferredPronoun"
+							(click)="toggleMorePronouns()" />
+					</gp-input>
+					<ul [collapse]="!isExpanded" [isAnimated]="true" class="gp-dropdownmenu">
+						<li *ngFor="let pronoun of pronouns" class="gp-dropdownmenuitem">
+							<button class="gp-dropdownmenubutton pronoun-item" (click)="selectPronoun(pronoun)">{{pronoun}}</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="bio-container">
+			<div class="bio-label">
+				<span>Your bio</span>
+				<button gp-button
+						gp-tooltip="{{toolTips.bio}}"
+						gp-tooltip-placement="bottom" iconId="gp-icon-info" styleType="tertiary" iconVariations="icononly"></button>
+			</div>
+			<div *ngIf="!editMode">
+				<div class="field-value mt-1">
+					{{ personalDetailsForm.get('bio')?.value || '--None entered--' }}
+				</div>
+			</div>
+			<div *ngIf="editMode">
+				<p class="bio-info">
+					Share some information about the group you want to create. You can always
+					edit these details later.
+				</p>
+				<gp-text-area [limit]="500" size="default" [error]="hasError('bio')" [errorMessage]="getErrorMessage('bio')">
+					<textarea aria-label="input" formControlName="bio"></textarea>
+				</gp-text-area>
+			</div>
+		</div>
+		<div class="action-container">
+			<div *ngIf="!editMode" class="text-right">
+				<button type="submit" gp-button label="Edit" class="staff-edit-btn" iconVariations="iconright"
+					styleType="primary" iconId="gp-icon-edit" (click)="toggleEditMode()"></button>
+			</div>
+			<div *ngIf="editMode" class="text-right">
+				<button type="submit" gp-button label="Discard changes" class="discard-changes-btn mx-5" styleType="secondary"
+					(click)="openDiscardConfirmationModal()"></button>
+				<button type="submit" gp-button label="Save changes" styleType="primary" (click)="saveStaffProfile()"></button>
+			</div>
+		</div>
+	</form>
+</div>

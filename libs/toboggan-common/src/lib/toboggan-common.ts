@@ -65,3 +65,16 @@ export enum UserType {
   Faculty = 'faculty',
   Other = 'other',
 }
+
+// IMPORTANT!! Mock interface - need to update when the endpoint is ready
+export interface IStaffProfile {
+  uuid: string,
+  firstName: string,
+  lastName: string,
+  preferredName: string,
+  preferredPronoun: string,
+  bio: string,
+  email: string,
+  phoneNumber: string,
+  inboxes: string
+}

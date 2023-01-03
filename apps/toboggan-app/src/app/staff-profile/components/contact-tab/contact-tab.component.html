@@ -1,0 +1,49 @@
+<div class="contact-details">
+	<form [formGroup]="contactDetailsForm">
+		<div class="details-container">
+			<div class="field-name">
+				<div>Email address</div>
+				<div class="field-value">
+					{{ contactDetailsForm.get('email')?.value }}
+				</div>
+			</div>
+
+			<div class="field-name">
+				<div class="phone-number-label">
+					<span>Phone number</span>
+					<button gp-button
+						gp-tooltip="{{toolTips.phoneNumber}}"
+						gp-tooltip-placement="bottom" iconId="gp-icon-info" styleType="tertiary" iconVariations="icononly"></button>
+				</div>
+                <div *ngIf="!editMode">
+				<div class="field-value">
+					{{ contactDetailsForm.get('phoneNumber')?.value || '--Not entered--'}}
+				</div>
+                </div>
+                <div *ngIf="editMode">
+					<gp-input size="default" [withIcon]="false" [error]="hasError('phoneNumber')" [errorMessage]="getErrorMessage('phoneNumber')">
+						<input aria-label="input" placeholder="Phone Number" type="text" formControlName="phoneNumber" class="gp-input" />
+					</gp-input>
+				</div>
+			</div>
+		</div>
+		<div class="details-container">
+			<div class="field-name">
+					<div>Your shared inboxes</div>
+					<div class="field-value">
+						{{ contactDetailsForm.get('inboxes')?.value }}
+					</div>
+			</div>
+		</div>
+		<div *ngIf="!editMode" class="text-right">
+			<button type="submit" gp-button label="Edit" class="staff-edit-btn" iconVariations="iconright" styleType="primary" iconId="gp-icon-edit"
+				(click)="toggleEditMode()"></button>
+		</div>
+		<div *ngIf="editMode" class="text-right">
+			<button type="submit" gp-button label="Discard changes" class="discard-changes-btn mx-5" styleType="secondary"
+				(click)="openDiscardConfirmationModal()"></button>
+			<button type="submit" gp-button label="Save changes" styleType="primary"
+				(click)="saveStaffProfile()"></button>
+		</div>
+	</form>
+</div>

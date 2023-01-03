@@ -1,0 +1,128 @@
+@use "../../../shared/styles/bootstrap_overrides";
+@import '../../../shared/styles/colors';
+@import "~bootstrap/scss/mixins/breakpoints";
+
+.details-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	// padding: 32px;
+	font-weight: 600;
+	margin-left: 32px;
+	margin-bottom: 32px;
+	font-size: 16px;
+	line-height: 28px;
+}
+
+.name-container {
+	margin: 29px 32px 32px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	// padding: 32px;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 28px;
+}
+
+.field-name {
+	width: 365px;
+}
+
+.field-value {
+	min-height: 22px;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 22px;
+}
+
+.bio-container {
+	width: 75%;
+	margin-left: 32px;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 28px;
+}
+
+
+.bio-label {
+	display: grid;
+	grid-template-columns: auto 1fr 4fr 4fr 4fr 4fr;
+
+	span {
+		font-style: normal;
+		font-weight: 600;
+		font-size: 16px;
+		line-height: 28px;
+		color: $primaryBlue;
+	}
+
+	button,
+	button:hover,
+	button:focus:not(:focus-visible) {
+		border: none;
+		padding: 0px 22px !important;
+	}
+}
+
+.action-container {
+	margin-top: 24px;
+
+	.text-right {
+		display: flex;
+		justify-content: end;
+	}
+}
+
+.name-input {
+	margin-right: 32px;
+}
+
+.bio-info,
+.name-info,
+.pronoun-info {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 22px;
+	color: #456067;
+}
+
+.name-label,
+.pronoun-label {
+	display: grid;
+	grid-template-columns: auto 1fr 1fr 1fr 1fr;
+
+	span {
+		font-style: normal;
+		font-weight: 600;
+		font-size: 16px;
+		line-height: 28px;
+		color: $primaryBlue;
+	}
+
+	button,
+	button:hover,
+	button:focus:not(:focus-visible) {
+		border: none;
+		padding: 0px 22px !important;
+	}
+}
+
+.gp-dropdownmenubutton {
+	border: none;
+	background: none;
+	font-size: 14px;
+	line-height: 28px;
+	font-weight: 400;
+	padding: 4px 16px;
+	white-space: nowrap;
+	text-align: start;
+}
+
+.gp-dropdownmenu {
+	background: $white;
+	list-style: none;
+	border-radius: 4px;
+	box-shadow: 0 2px 8px rgba(7, 27, 57, 0.16);
+	width: 90%;
+}

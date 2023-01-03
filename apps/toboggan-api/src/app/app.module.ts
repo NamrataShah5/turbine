@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { StaffProfileModule } from '../staff-profile/staff-profile.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AssessmentsModule } from './modules/assessments/assessments.module';
@@ -15,7 +16,8 @@ import { UsersModule } from './modules/users/users.module';
     GroupsModule,
     PermissionsModule,
     AssessmentsModule,
-    AuthenticationModule
+    AuthenticationModule,
+    StaffProfileModule
   ],
   controllers: [AppController],
   providers: [AppService],

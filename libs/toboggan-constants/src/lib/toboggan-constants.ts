@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 export function tobogganConstants(): string {
   return 'toboggan-constants';
 }
@@ -8,10 +9,11 @@ export enum FormError {
   lettersAndNumbers = 'Use only letters and numbers',
   characters = 'Don’t use these characters: ',
   maxLength = 'You are exceeding the limit',
+  numberFormat = 'Use this format: (###) ###-####'
 }
 
 export enum ValidatorPattern {
   // eslint-disable-next-line
   // letters, periods, hyphen s, spaces, and apostrophes, accented characters such as é, ö, û
-  nameValidation = '^[A-Za-zÀ-ÖØ-öø-ÿ\\.\\- \']+$', 
+  nameValidation = '^[A-Za-zÀ-ÖØ-öø-ÿ\\.\\- \']+$',
 }
