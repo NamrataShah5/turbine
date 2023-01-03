@@ -1,69 +1,27 @@
-<toboggan-ws-modal
-  #edit
-  title="Edit user"
-  acceptButton="Review changes"
-  id="edit-user"
-  (hidden)="editModalHidden()"
-  (accept)="editModalAccept()"
->
+<toboggan-ws-modal #edit title="Edit user" acceptButton="Review changes" id="edit-user" (hidden)="editModalHidden()"
+  (accept)="editModalAccept()">
   <form [formGroup]="userForm">
     <p class="gp-paragraph" *ngIf="user">
       {{ user.firstName }} {{ user.lastName }} (User ID: {{ user.userId }})
     </p>
-    <gp-input
-      label="First name"
-      toboggan-ws-error-message
-      #firstNameErrMsg="tbWsErrMsg"
-      [form]="userForm"
-      controlName="firstName"
-      [error]="firstNameErrMsg.hasError"
-      [errorMessage]="firstNameErrMsg.errorMessage"
-    >
+    <gp-input label="First name" toboggan-ws-error-message #firstNameErrMsg="tbWsErrMsg" [form]="userForm"
+      controlName="firstName" [error]="firstNameErrMsg.hasError" [errorMessage]="firstNameErrMsg.errorMessage">
       <input type="text" formControlName="firstName" />
     </gp-input>
-    <gp-input
-      label="Last name"
-      toboggan-ws-error-message
-      #lastNameErrMsg="tbWsErrMsg"
-      [form]="userForm"
-      controlName="lastName"
-      [error]="lastNameErrMsg.hasError"
-      [errorMessage]="lastNameErrMsg.errorMessage"
-    >
+    <gp-input label="Last name" toboggan-ws-error-message #lastNameErrMsg="tbWsErrMsg" [form]="userForm"
+      controlName="lastName" [error]="lastNameErrMsg.hasError" [errorMessage]="lastNameErrMsg.errorMessage">
       <input type="text" formControlName="lastName" />
     </gp-input>
-    <gp-input
-      label="Email address"
-      toboggan-ws-error-message
-      #emailErrMsg="tbWsErrMsg"
-      [form]="userForm"
-      controlName="email"
-      [error]="emailErrMsg.hasError"
-      [errorMessage]="emailErrMsg.errorMessage"
-    >
+    <gp-input label="Email address" toboggan-ws-error-message #emailErrMsg="tbWsErrMsg" [form]="userForm"
+      controlName="email" [error]="emailErrMsg.hasError" [errorMessage]="emailErrMsg.errorMessage">
       <input type="email" formControlName="email" />
     </gp-input>
   </form>
 </toboggan-ws-modal>
 
-<div *ngIf="isLoading">
-  <gp-interstitial-loader
-    [isOverlayVisible]="true"
-    [type]="loaderType"
-  ></gp-interstitial-loader>
-</div>
-
-<toboggan-ws-modal
-  #review
-  title="Approve changes?"
-  acceptButton="Yes, approve"
-  cancelButton="No, keep editing"
-  id="edit-user-review"
-  (hidden)="reviewModalHidden()"
-  (accept)="onSubmit()"
->
+<toboggan-ws-modal #review title="Approve changes?" acceptButton="Yes, approve" cancelButton="No, keep editing"
+  id="edit-user-review" (hidden)="reviewModalHidden()" (accept)="onSubmit()" [loading]="isLoading"
+  (loaderCancel)="handleModalLoaderCancel()">
   <toboggan-ws-form-changes-table [rows]="approveChanges">
   </toboggan-ws-form-changes-table>
 </toboggan-ws-modal>
-
-{{ user }}

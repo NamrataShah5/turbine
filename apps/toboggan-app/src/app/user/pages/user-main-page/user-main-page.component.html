@@ -9,25 +9,18 @@
       <div class="page-container">
         <toboggan-ws-user-table>
           <div table-cta-right>
-            <button
-              gp-button
-              gp-modal-trigger
-              [modalTemplate]="createusertemplate"
-              modalTitle="Add new user"
-              [modalButtons]="createUserModalButtonsConfig"
-              #createUserModalDirective="gpModalTrigger"
+            <button gp-button gp-modal-trigger [modalLoading]="modalLoading" [modalTemplate]="createusertemplate"
+              modalTitle="Add new user" [modalButtons]="createUserModalButtonsConfig"
+              (modalLoaderCancel)="handleModalLoaderCancel()" #createUserModalDirective="gpModalTrigger"
               aria-label="blomp">
               Add new user
             </button>
 
             <ng-template #createusertemplate>
-              <toboggan-ws-create-user
-                #createUserModal
-                [modalHandle]="createUserModalDirective.modalRef?.content">
+              <toboggan-ws-create-user #createUserModal [modalHandle]="createUserModalDirective.modalRef?.content">
               </toboggan-ws-create-user>
             </ng-template>
-            <toboggan-ws-edit-user
-              [(user)]="userService.editingUser"></toboggan-ws-edit-user>
+            <toboggan-ws-edit-user [(user)]="userService.editingUser"></toboggan-ws-edit-user>
           </div>
         </toboggan-ws-user-table>
       </div>

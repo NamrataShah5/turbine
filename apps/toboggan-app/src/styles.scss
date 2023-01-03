@@ -2,15 +2,26 @@
 
 @import './app/shared/styles/_colors.scss';
 @import './app/shared/styles/_typography.scss';
+
 .modal .modal-dialog {
-    .dropdown.open.dropdown-menu {
-        width: 100%;
-        max-height: 100px !important;
-    }
-    &.gp-modalalert {
-        max-width: 560px;
-    }
+  .dropdown.open.dropdown-menu {
+    width: 100%;
+    max-height: 100px !important;
+  }
+
+  &.gp-modalalert {
+    max-width: 560px;
+  }
 }
+
 .permission-list-container .gp-table-x-table thead tr:last-of-type .dropdown-menu.gp-tablefilter-x-dropdown {
-    inset: 100% 0px auto auto !important;
+  inset: 100% 0px auto auto !important;
+}
+
+.alert-modal-open {
+  modal-container {
+    &:first-of-type {
+      display: none !important;
+    }
+  }
 }

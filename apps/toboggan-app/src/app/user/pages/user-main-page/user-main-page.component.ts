@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ModalButtonConfig } from '@snhuproduct/toboggan-ui-components-library';
 import { AuthService } from '../../../shared/auth/auth.service';
+import { ModalCancelApiService } from '../../../shared/services/cancel-api/cancel-api.service';
 import { UserService } from '../../../shared/services/user/user.service';
 import { CreateUserComponent } from '../../components/create-user/create-user.component';
 
@@ -12,11 +13,13 @@ import { CreateUserComponent } from '../../components/create-user/create-user.co
 export class UserMainPageComponent {
   constructor(
     private auth: AuthService,
-    public userService: UserService
-  ) {}
+    public userService: UserService,
+    public modalCancelApiService: ModalCancelApiService
+  ) { }
 
   @ViewChild('createUserModal', { static: false })
   createUserModal?: CreateUserComponent;
+  modalLoading = false;
 
   createUserModalButtonsConfig: ModalButtonConfig[] = [
     {
@@ -35,11 +38,22 @@ export class UserMainPageComponent {
     return true;
   }
 
+  handleModalLoaderCancel() {
+    this.modalCancelApiService.show().subscribe(() => {
+      this.userService.unsubscibeUsersApi();
+    });
+  }
+
   async handleAddNewUserModalButton() {
     if (!this.createUserModal) {
       return false;
     }
+    if (this.createUserModal.userForm.valid) {
+      this.modalLoading = true;
+    }
+
     const result = await this.createUserModal.handleAddNewUserModalButton();
+    this.modalLoading = false;
     return result;
   }
 

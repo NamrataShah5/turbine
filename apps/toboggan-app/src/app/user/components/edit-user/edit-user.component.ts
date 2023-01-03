@@ -14,6 +14,7 @@ import { ValidatorPattern } from '@toboggan-ws/toboggan-constants';
 import * as R from 'ramda';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { BannerService } from '../../../shared/services/banner/banner.service';
+import { ModalCancelApiService } from '../../../shared/services/cancel-api/cancel-api.service';
 import { UserService } from '../../../shared/services/user/user.service';
 
 @Component({
@@ -24,8 +25,9 @@ import { UserService } from '../../../shared/services/user/user.service';
 export class EditUserComponent implements OnChanges {
   constructor(
     public userService: UserService,
-    private bannerService: BannerService
-  ) {}
+    private bannerService: BannerService,
+    public modalCancelApiService: ModalCancelApiService
+  ) { }
   isLoading = false;
   reviewing?: Partial<IUser> | null = null;
   loaderType = InterstitialLoaderType.Large;
@@ -109,10 +111,16 @@ export class EditUserComponent implements OnChanges {
     );
   }
 
+  handleModalLoaderCancel() {
+    this.modalCancelApiService.show().subscribe(() => {
+      this.userService.unsubscibeUsersApi();
+    });
+  }
+
   async onSubmit() {
     try {
       if (this.user) {
-        const userObj = {...this.userForm.getRawValue() as IUser, userType: this.user.userType};
+        const userObj = { ...this.userForm.getRawValue() as IUser, userType: this.user.userType };
         this.isLoading = true;
 
         await this.userService.updateUser(userObj, this.user?.userId);
@@ -134,10 +142,6 @@ export class EditUserComponent implements OnChanges {
         type: 'error',
         heading: ``,
         message: `<b>Edit user</b> couldn't be completed.`,
-        button: {
-          label: 'Dismiss',
-          action: (bannerId: number) => this.bannerService.hideBanner(bannerId),
-        },
         autoDismiss: true,
       });
 

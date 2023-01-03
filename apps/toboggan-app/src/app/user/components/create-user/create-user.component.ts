@@ -18,8 +18,6 @@ export class CreateUserComponent {
   @Input() modalHandle?: ModalComponent;
 
   failedToAddUser = false; //indicated wether error banner is shown
-
-  isLoading = false;
   loaderType = InterstitialLoaderType.Large;
 
   userForm = new FormGroup({
@@ -76,7 +74,6 @@ export class CreateUserComponent {
         }
         const userObj = this.userForm.getRawValue() as unknown as IUser;
         userObj.userType = UserType.Faculty;
-        this.isLoading = true;
         await delay(400); // add delay if need to demo loader
         await this.userService.createUser(userObj);
         this.bannerService.showBanner({
@@ -98,8 +95,6 @@ export class CreateUserComponent {
           message: "couldn't be completed.",
         });
         return false;
-      } finally {
-        this.isLoading = false;
       }
     } else {
       // don't close modal
