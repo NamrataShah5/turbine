@@ -40,7 +40,7 @@ export class UsersService {
   }
 
   updateStatus(id: string, updateStatus: UpdateStatusDTO) {
-    return this.httpService.put(`/user/${id}`, updateStatus);
+    return this.httpService.post(`/user/${id}/change-status`, updateStatus);
   }
 
   deleteUser(id: string) {

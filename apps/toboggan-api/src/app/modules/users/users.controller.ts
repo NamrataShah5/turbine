@@ -12,8 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UserType } from '@toboggan-ws/toboggan-common';
-import { omitBy , isUndefined } from 'lodash';
-import { lastValueFrom } from 'rxjs';
+import { isUndefined, omitBy } from 'lodash';
 import { HTTPHeaderAuthGuard } from '../auth/http-header-auth-guard.service';
 import { TokenInterceptor } from '../auth/token.interceptor';
 import { RequestInterceptor } from '../common/request.interceptor';
@@ -66,16 +65,10 @@ export class UsersController {
     return this.usersService.deleteUser(id);
   }
 
-  @Put('/status/:id')
+  @Post('/status/:id')
   async updateStatus(@Param('id') id, @Body() body: UpdateStatusDTO) {
-    const response = await lastValueFrom(this.getUser(id));
-
-    const user = response.data.data;
-
-    return this.usersService.updateUser(id, {
-      ...user,
-      status: body.status,
-      user_groups: [],
+    return this.usersService.updateStatus(id, {
+      status: body.status
     });
   }
 
@@ -99,3 +92,4 @@ export class UsersController {
   //   }
   // }
 }
+

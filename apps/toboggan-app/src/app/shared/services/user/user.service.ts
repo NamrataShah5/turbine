@@ -50,7 +50,10 @@ export class UserService {
     await firstValueFrom(this.http.put(`/api/users/${userId}`, updatedUser)
       .pipe(takeUntil(this.ngUnsubscribe)));
   }
-
+  
+  async updateUserStatus(updatedUserStatus: Partial<IUser>, userId: string): Promise<void> {
+    await firstValueFrom(this.http.post(`/api/users/status/${userId}`, updatedUserStatus));
+  }
   async patchUser(patchUser: Partial<IUser>, userId: string): Promise<void> {
     await firstValueFrom(this.http.patch(`/api/users/${userId}`, patchUser));
     this.fetchUsers();

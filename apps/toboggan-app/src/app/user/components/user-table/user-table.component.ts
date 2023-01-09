@@ -182,7 +182,7 @@ export class UserTableComponent implements OnInit, OnDestroy {
           onClick: async () => {
             try {
               this.modalAlertService.hideModalAlert();
-              await this.toggleUserStatus('active', userPayload, id);
+              await this.toggleUserStatus('active', id);
 
               this.showNotification(
                 'success',
@@ -226,7 +226,7 @@ export class UserTableComponent implements OnInit, OnDestroy {
           onClick: async () => {
             try {
               this.modalAlertService.hideModalAlert();
-              await this.toggleUserStatus('inactive', userPayload, id);
+              await this.toggleUserStatus('inactive', id);
 
               this.showNotification(
                 'success',
@@ -391,12 +391,10 @@ export class UserTableComponent implements OnInit, OnDestroy {
 
   private async toggleUserStatus(
     status: 'active' | 'inactive',
-    userPayload: UserStatusPayload,
     userId: string
   ) {
-    await this.userService.updateUser(
+    await this.userService.updateUserStatus(
       {
-        ...userPayload,
         status: status
       },
       userId
