@@ -12,7 +12,7 @@ export const getDateDiffObject = (start: TDate, end: TDate) => {
   const startDate = new Date(start).getTime();
   const endDate = new Date(end).getTime();
   const dateDiff = endDate - startDate;
-  const dateInMinutesDiff = Math.floor( dateDiff / 1000 / 60);
+  const dateInMinutesDiff = Math.floor(dateDiff / 1000 / 60);
   const days = Math.trunc(dateInMinutesDiff / 1440);
   const hours = Math.trunc((dateInMinutesDiff % 1440) / 60);
   const minutes = Math.trunc((dateInMinutesDiff % 1440) % 60);
@@ -39,7 +39,12 @@ export const getDateDiffObject = (start: TDate, end: TDate) => {
   return dateObj;
 };
 
-export const getFormattedDateDiff = ({ sign, days, hours, minutes }: IDateObj) => {
+export const getFormattedDateDiff = ({
+  sign,
+  days,
+  hours,
+  minutes,
+}: IDateObj) => {
   let copy = '';
 
   if (sign < 0) {
@@ -54,4 +59,4 @@ export const getFormattedDateDiff = ({ sign, days, hours, minutes }: IDateObj) =
   copy += minutes + 'm';
 
   return copy;
-}
+};

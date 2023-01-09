@@ -12,7 +12,7 @@ import { TokenInterceptor } from '../auth/token.interceptor';
 import { RequestInterceptor } from '../common/request.interceptor';
 import { ResponseInterceptor } from '../common/response.interceptor';
 import { AssessmentsService } from './assessments.service';
-import { IAssessmentFlag } from './assessments.types';
+import { ISubmittedAssessment } from './assessments.types';
 
 @UseGuards(HTTPHeaderAuthGuard)
 @UseInterceptors(TokenInterceptor, ResponseInterceptor, RequestInterceptor)
@@ -20,6 +20,7 @@ import { IAssessmentFlag } from './assessments.types';
 export class AssessmentsController {
   constructor(private readonly assessmentsService: AssessmentsService) {}
 
+  // Update assessment
   @Get('/')
   getAssessments() {
     return this.assessmentsService.getAssessments();
@@ -30,9 +31,12 @@ export class AssessmentsController {
     return this.assessmentsService.getEvaluatedAssessments();
   }
 
-  //Update Flag assessment
-  @Put('/:uuid')
-  updateFlagStatus(@Param('uuid') uuid, @Body() body: IAssessmentFlag) {
-    return this.assessmentsService.updateFlagStatus(uuid, body);
+  // update submitted assessment
+  @Put('/subittedAssessment/:uuid')
+  updateSubmittedAssessment(
+    @Param('uuid') uuid,
+    @Body() body: Partial<ISubmittedAssessment>
+  ) {
+    return this.assessmentsService.updateSubmittedAssessment(uuid, body);
   }
 }

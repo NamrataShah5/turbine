@@ -6,7 +6,7 @@ import {
   Output,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { ModalComponent as TobogganModalComponent } from '@snhuproduct/toboggan-ui-components-library';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -16,13 +16,14 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnChanges {
-  constructor(public service: BsModalService) { }
+  constructor(public service: BsModalService) {}
   public modal?: BsModalRef;
   state = false;
   @Input() id!: string;
   @Input() title!: string;
   @Input() acceptButton = 'Submit';
   @Input() cancelButton = 'Cancel';
+  @Input() class = '';
   @Input() loading = false;
   @Output() accept = new EventEmitter();
   @Output() hidden = new EventEmitter();
@@ -57,7 +58,7 @@ export class ModalComponent implements OnChanges {
           },
         ],
       },
-      class: 'gp-modal',
+      class: `gp-modal ${this.class}`,
     });
     const hideSubscr = this.modal?.onHide?.subscribe(() => {
       this.hide.emit();

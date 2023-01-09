@@ -2,7 +2,7 @@ import {
   TableColumnAlignmentEnum,
   TableColumnDataTypeEnum,
   TableColumnDisplayMetadatum,
-  TableColumnSortStateEnum
+  TableColumnSortStateEnum,
 } from '@snhuproduct/toboggan-ui-components-library';
 
 export const assessmentTableHeader: TableColumnDisplayMetadatum[] = [
@@ -68,15 +68,13 @@ export const assessmentTableHeader: TableColumnDisplayMetadatum[] = [
     searchableField: true,
     alignment: TableColumnAlignmentEnum.Center,
     dataType: TableColumnDataTypeEnum.PercentLink,
-    sticky: true
+    sticky: true,
   },
 ];
 
 export enum RowActions {
-  Edit = 'edit',
-  ViewDetails = 'view details',
-  FlagForInstructorReview = 'flag for instructor review',
-  Delete = 'delete',
-  Evaluate = 'evaluate',
-  RemoveFlag = 'remove flag',
+  FlagForInstructorReview = 'Flag for instructor review',
+  Evaluate = 'Evaluate',
+  ReturnUnEvaluated = 'Return unevaluated',
+  RemoveFlag = 'Remove flag',
 }

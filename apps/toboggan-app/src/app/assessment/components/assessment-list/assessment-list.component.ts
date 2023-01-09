@@ -2,16 +2,20 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   TableDataGenerator,
-  TableRow
+  TableRow,
 } from '@snhuproduct/toboggan-ui-components-library';
 import { IRowActionEvent } from '@snhuproduct/toboggan-ui-components-library/lib/table/row-action-event.interface';
-import { getDateDiffObject, getFormattedDateDiff, IAssessment } from '@toboggan-ws/toboggan-common';
+import {
+  getDateDiffObject,
+  getFormattedDateDiff,
+  IAssessment,
+} from '@toboggan-ws/toboggan-common';
 import { Observable, Subscription } from 'rxjs';
 import { BannerService } from '../../../shared/services/banner/banner.service';
 import { ModalAlertService } from '../../../shared/services/modal-alert/modal-alert.service';
 import {
   ITableDataGeneratorFactoryOutput,
-  TableDataService
+  TableDataService,
 } from '../../../shared/services/table-data/table-data.service';
 import { AssessmentService } from '../../services/assessment.service';
 import { assessmentTableHeader, RowActions } from './assessment-table.type';
@@ -27,8 +31,9 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
   assessmentList: TableRow[] = [];
   currentPage = 1;
   itemsPerPage = 10;
-  showFlagAssessmentModal = false;
+  showAssessmentModal = false;
   editAssessmentData!: IAssessment;
+  selectedOption!: RowActions;
   private dataGeneratorFactoryOutputObserver: Observable<ITableDataGeneratorFactoryOutput> =
     {} as Observable<ITableDataGeneratorFactoryOutput>;
   private datageneratorSubscription: Subscription = {} as Subscription;
@@ -41,7 +46,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     private router: Router,
     private modalAlertService: ModalAlertService,
     private bannerService: BannerService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.refreshTableData();
@@ -54,12 +59,12 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   onRowAction(event: IRowActionEvent) {
     const { action, rowId } = event;
     const rowData = this.dataGenerator.rowData.find(
       (row) => row.rowId === rowId
     );
-
     if (!rowData) {
       throw new Error('Could not find rowData for rowId: ' + rowId);
     }
@@ -67,7 +72,13 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     switch (action) {
       case RowActions.FlagForInstructorReview:
         this.editAssessmentData = rowData.cellData as unknown as IAssessment;
-        this.showFlagAssessmentModal = true;
+        this.showAssessmentModal = true;
+        this.selectedOption = RowActions.FlagForInstructorReview;
+        break;
+      case RowActions.ReturnUnEvaluated:
+        this.editAssessmentData = rowData.cellData as unknown as IAssessment;
+        this.showAssessmentModal = true;
+        this.selectedOption = RowActions.ReturnUnEvaluated;
         break;
       case RowActions.Evaluate:
         this.router.navigate([`/assessment/details/${rowId}`]);
@@ -77,17 +88,24 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
         break;
     }
   }
-  handleEditFlagAssessmentAction() {
-    this.showFlagAssessmentModal = false;
+
+  handleAssessmentAction(id: string | undefined) {
+    if (this.selectedOption === RowActions.ReturnUnEvaluated && id) {
+      this.refreshTableData();
+    }
+    this.showAssessmentModal = false;
   }
+
   getActionMenuItems = (rowData: TableRow) => {
-    const actionMenuItems = ['view details', 'edit', 'delete']
+    const actionMenuItems = [RowActions.ReturnUnEvaluated];
     if (rowData.cellData['flagged']) {
       actionMenuItems.push(RowActions.RemoveFlag);
     } else {
       actionMenuItems.push(RowActions.FlagForInstructorReview);
     }
-    return this.selectedTab === 'toBeEvaluate' ? [...actionMenuItems, 'evaluate'] : actionMenuItems;
+    return this.selectedTab === 'toBeEvaluate'
+      ? [...actionMenuItems, RowActions.Evaluate]
+      : actionMenuItems;
   };
 
   formatTableRowsWithAssessmentData(fetchedData: unknown): TableRow[] {
@@ -97,31 +115,34 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     const data = assessments.map((cellData, index) => {
       const actionIcon = cellData.flagged ? 'gp-icon-flag' : '';
       const className = cellData.flagged ? 'gp-table-x-bodyrow-diabled' : '';
-
       const dateDiffObj = getDateDiffObject(cellData.timeLeft, new Date());
 
-      const timeLeftCellColor = dateDiffObj.diff < THRESHOLD_OF_RED
-        ? 'gp-red-20'
-        : dateDiffObj.diff >= THRESHOLD_OF_RED && dateDiffObj.diff < THRESHOLD_OF_YELLOW
+      const timeLeftCellColor =
+        dateDiffObj.diff < THRESHOLD_OF_RED
+          ? 'gp-red-20'
+          : dateDiffObj.diff >= THRESHOLD_OF_RED &&
+            dateDiffObj.diff < THRESHOLD_OF_YELLOW
           ? 'gp-yellow-20'
           : '';
 
-      const similarityColor = cellData.similarity < .27
-        ? 'gp-green-80'
-        : (cellData.similarity >= .27 && cellData.similarity < .89)
+      const similarityColor =
+        cellData.similarity < 0.27
+          ? 'gp-green-80'
+          : cellData.similarity >= 0.27 && cellData.similarity < 0.89
           ? 'gp-yellow-80'
           : 'gp-red-80';
 
-      const attemptBorderCellClass = cellData.currentAttempt > cellData.attempts
-        ? 'gp-table-x-cell-warning-border'
-        : '';
+      const attemptBorderCellClass =
+        cellData.currentAttempt > cellData.attempts
+          ? 'gp-table-x-cell-warning-border'
+          : '';
 
       const pausedTimeLeftCellObject = {
         value: 'Paused',
         cellType: 'icon-right',
         cellTypeOptions: {
           icon: 'gp-icon-lock',
-          iconClass: 'gp-fill-cool-gray-100'
+          iconClass: 'gp-fill-cool-gray-100',
         },
       };
 
@@ -130,7 +151,9 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
         cellClass: timeLeftCellColor,
       };
 
-      const timeLeftCellObject = cellData.flagged ? pausedTimeLeftCellObject : defaultTimeLeftCellObject;
+      const timeLeftCellObject = cellData.flagged
+        ? pausedTimeLeftCellObject
+        : defaultTimeLeftCellObject;
 
       return {
         rowId: String(index + 1),
@@ -138,6 +161,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
         className,
         cellData: {
           id: cellData.id,
+          uuid: cellData.uuid,
           time_left: timeLeftCellObject,
           learner: cellData.learner,
           competency: cellData.competency,
@@ -179,7 +203,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
         this.itemsPerPage,
         prevCurrentPage,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        () => { },
+        () => {},
         []
       );
 
@@ -198,7 +222,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     this.modalAlertService.showModalAlert({
       type: 'warning',
       heading: 'Remove this flag?',
-      message: `If you do, this submission will be added back to your evaluation list, and you’ll have 48 hours to evaluate it.`,
+      message: `If you do, this submission will be added back to your evaluation list, and you'll have 48 hours to evaluate it.`,
       buttons: [
         {
           title: 'No, cancel',
@@ -213,13 +237,16 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
             try {
               this.modalAlertService.hideModalAlert();
               const body = {
-                is_flagged: false
+                isFlagged: false,
               };
-              await this.assessmentService.updateFlagAssessment(rowData.cellData.id, body);
+              await this.assessmentService.updateSubmittedAssessment(
+                rowData.cellData.uuid,
+                body
+              );
               this.bannerService.showBanner({
                 type: 'success',
                 heading: '',
-                message: `<b>${rowData.cellData.learner}</b>’s submission is no longer flagged. You now have 48 hours to evaluate it.`,
+                message: `<b>${rowData.cellData.learner}</b>'s submission is no longer flagged. You now have 48 hours to evaluate it.`,
                 button: null,
                 autoDismiss: true,
               });
@@ -227,7 +254,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
               this.bannerService.showBanner({
                 type: 'error',
                 heading: '',
-                message: `The flag couldn’t be removed from <b>${rowData.cellData.learner}</b>’s submission. Please try again.`,
+                message: `The flag couldn't be removed from <b>${rowData.cellData.learner}</b>'s submission. Please try again.`,
                 button: null,
                 autoDismiss: true,
               });
@@ -239,6 +266,3 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     });
   }
 }
-
-
-

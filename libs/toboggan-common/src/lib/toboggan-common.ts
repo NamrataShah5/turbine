@@ -12,8 +12,10 @@ export interface IGroup {
 
 export interface IAssessment {
   id: string;
-  timeLeft: string;
+  uuid: string;
   learner: string;
+  learnerId: string;
+  timeLeft: string;
   result: string | null;
   resultComment: string | null;
   competency: string;
@@ -21,6 +23,7 @@ export interface IAssessment {
   attempts: number;
   currentAttempt: number;
   instructor: string;
+  comments: any;
   similarity: number;
   similarityUrl: string;
   evaluated: boolean;
@@ -68,13 +71,13 @@ export enum UserType {
 
 // IMPORTANT!! Mock interface - need to update when the endpoint is ready
 export interface IStaffProfile {
-  uuid: string,
-  firstName: string,
-  lastName: string,
-  preferredName: string,
-  preferredPronoun: string,
-  bio: string,
-  email: string,
-  phoneNumber: string,
-  inboxes: string
+  uuid: string;
+  firstName: string;
+  lastName: string;
+  preferredName: string;
+  preferredPronoun: string;
+  bio: string;
+  email: string;
+  phoneNumber: string;
+  inboxes: string;
 }

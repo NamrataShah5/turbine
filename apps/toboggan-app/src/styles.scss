@@ -14,6 +14,11 @@
   }
 }
 
+// for return unevaluated modal width adjustment
+.unevaluated-modal {
+    max-width: 552px !important;
+}
+
 .permission-list-container .gp-table-x-table thead tr:last-of-type .dropdown-menu.gp-tablefilter-x-dropdown {
   inset: 100% 0px auto auto !important;
 }

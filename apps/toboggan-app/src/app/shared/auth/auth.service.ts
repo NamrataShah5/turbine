@@ -41,7 +41,12 @@ export class AuthService {
       if (!user) {
         return;
       }
-
+      const currentUser = JSON.stringify({
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+      });
+      localStorage.setItem('currentUser', currentUser);
       this.activityMonitor.user.action = lastActivity
         ? Number(lastActivity)
         : Date.now();
@@ -95,7 +100,6 @@ export class AuthService {
       const result = await signInWithPopup(this.auth, provider);
 
       const credential = OAuthProvider.credentialFromResult(result);
-
       if (credential !== null) {
         const idToken = credential.idToken ?? '';
         this.setSsoTokenJwt(idToken);
@@ -109,7 +113,9 @@ export class AuthService {
 
   removeTokenJwts() {
     [this.ssoIdToken, this.jwtSso] = ['', null];
-    ['jwtSso', 'ssoIdToken'].map((key) => localStorage.removeItem(key));
+    ['jwtSso', 'ssoIdToken', 'currentUser'].map((key) =>
+      localStorage.removeItem(key)
+    );
   }
 
   refreshTokensJwts() {
@@ -183,8 +189,8 @@ export class AuthService {
     const user = {
       firstName: userDetails?.['given_name'],
       lastName: userDetails?.['family_name'],
-      email: userDetails?.['email']
-    }
+      email: userDetails?.['email'],
+    };
     return user as Partial<IUser>;
   }
 
@@ -193,5 +199,10 @@ export class AuthService {
   // will revisit
   get isSignedIn(): boolean {
     return Boolean(this.jwtSso && !this.jwtSso.isTokenExpired());
+  }
+
+  get currentUser() {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) return JSON.parse(currentUser);
   }
 }

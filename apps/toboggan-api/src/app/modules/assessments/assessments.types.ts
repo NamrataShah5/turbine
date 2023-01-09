@@ -21,8 +21,8 @@ export interface IAssessment {
   achievements: string[];
   created_time: string;
   last_modified_time: string;
-  is_flagged: boolean,
-  comments: string
+  is_flagged: boolean;
+  comments: any;
 }
 
 export enum AssessmentStatus {
@@ -48,7 +48,39 @@ export interface IAssessmentReferences {
   skills: any[];
 }
 
-export interface IAssessmentFlag {
-  is_flagged : boolean;
-  comments : string;
+export interface ISubmittedAssessment {
+  assessment_id: string;
+  learner_id: string;
+  assessor_id: string;
+  type: string;
+  plagiarism_score: number;
+  plagiarism_report_path: string;
+  assessment_gcs_path: string;
+  result: string;
+  pass_status: boolean;
+  is_flagged: boolean;
+  status: SubmittedAssessmentStatus;
+  comments: ISubmittedAssessmentItemComment[];
+  attempt_no: number;
+  assessment_session_id: string;
+  assessment_session_data: object;
+  submitted_rubrics: object;
+}
+
+export enum SubmittedAssessmentStatus {
+  NonEvaluated = 'non-evaluated',
+  Evaluated = 'evaluated',
+  Paused = 'paused',
+}
+
+export interface ISubmittedAssessmentItemComment {
+  comment: string;
+  type: SubmittedAssessmentCommentType;
+  access: string;
+  author: string;
+}
+
+export enum SubmittedAssessmentCommentType {
+  NonEvaluated = 'non-eval',
+  Flagged = 'flag',
 }
