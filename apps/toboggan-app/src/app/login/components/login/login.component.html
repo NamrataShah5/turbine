@@ -1,5 +1,37 @@
 <div class="container">
-  <button gp-button class="center" (click)="signinWithGoogle()">
-    Sign in with Google
-  </button>
+  <div class="login-container">
+    <div class="form-container">
+      <form [formGroup]="loginForm">
+        <gp-input size="default" label="Email" [withIcon]="false">
+          <input
+            aria-label="input"
+            placeholder="Email"
+            type="text"
+            formControlName="email"
+          /> </gp-input
+        ><br />
+        <gp-input size="default" label="Password" [withIcon]="false">
+          <input
+            type="password"
+            aria-label="input"
+            placeholder="******"
+            formControlName="password"
+          /> </gp-input
+        ><br />
+        <button
+          (click)="signinWithCredentials()"
+          data-testid="login-btn"
+          gp-button
+        >
+          Sign In
+        </button>
+      </form>
+    </div>
+    <span>OR</span>
+    <div class="login-with-google">
+      <button gp-button (click)="signinWithGoogle()">
+        Sign in with Google
+      </button>
+    </div>
+  </div>
 </div>

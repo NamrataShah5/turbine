@@ -13,6 +13,7 @@ import { JWTToken } from 'libs/jwttoken/jwttoken';
 import { Strategy } from 'passport-http-header-strategy';
 import { catchError, lastValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable()
 export class HTTPHeaderStrategy extends PassportStrategy(
@@ -21,7 +22,8 @@ export class HTTPHeaderStrategy extends PassportStrategy(
 ) {
   constructor(
     private httpService: HttpService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private authenticationService: AuthenticationService,
   ) {
     super({
       header: 'Authorization',
@@ -31,12 +33,25 @@ export class HTTPHeaderStrategy extends PassportStrategy(
   }
 
   async validate(request: Request, token: string): Promise<unknown> {
+
+    const jwtToken = new JWTToken(token);
+    const authType = this.authenticationService.getAuthType(jwtToken);
+
+    if (
+      authType === 'EMAIL_PW_AUTH' ||
+      request.headers['idp-override'] == 'true'
+    ) {
+      return {
+        data: {
+          idToken: request.headers['authorization'].replace('Bearer ', ''),
+        },
+      };
+    }
     if (!token) {
       throw new UnauthorizedException();
     }
 
     // decode token supplied by user
-    const jwtToken = new JWTToken(token);
     jwtToken.decodeToken();
 
     // use cache if enabled

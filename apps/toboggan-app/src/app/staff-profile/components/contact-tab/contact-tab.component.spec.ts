@@ -1,4 +1,8 @@
-import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpClientModule,
+  HttpHandler,
+} from '@angular/common/http';
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -7,6 +11,7 @@ import { mock, MockProxy } from 'jest-mock-extended';
 import { of } from 'rxjs';
 import { BannerService } from '../../../shared/services/banner/banner.service';
 import { ModalAlertService } from '../../../shared/services/modal-alert/modal-alert.service';
+import { SharedModule } from '../../../shared/shared.module';
 import { mockStaffProfile } from '../../pages/staff-profile-main.mock';
 import { StaffProfileService } from '../../services/staff-profile.service';
 
@@ -18,7 +23,8 @@ describe('ContactTabComponent', () => {
   let modalAlertService: ModalAlertService;
   let staffProfileService: StaffProfileService;
 
-  const mockStaffProfileService: MockProxy<StaffProfileService> = mock<StaffProfileService>();
+  const mockStaffProfileService: MockProxy<StaffProfileService> =
+    mock<StaffProfileService>();
   const mockBannerService = {
     showBanner: jest.fn().mockReturnValueOnce(of(true)),
   };
@@ -29,12 +35,11 @@ describe('ContactTabComponent', () => {
         HttpClient,
         HttpHandler,
         { provide: StaffProfileService, useValue: mockStaffProfileService },
-        { provide: BannerService, useValue: mockBannerService }
+        { provide: BannerService, useValue: mockBannerService },
       ],
       declarations: [ContactTabComponent],
-      imports: [ReactiveFormsModule, HttpClientModule]
-    })
-      .compileComponents();
+      imports: [ReactiveFormsModule, HttpClientModule, SharedModule],
+    }).compileComponents();
 
     modalAlertService = TestBed.inject(ModalAlertService);
     fixture = TestBed.createComponent(ContactTabComponent);
@@ -47,11 +52,9 @@ describe('ContactTabComponent', () => {
   it('should create', () => {
     const getStaffProfileSpy = jest.spyOn(component, 'setDetailsForm');
     expect(component).toBeTruthy();
-    component.ngOnChanges(
-      {
-        profile: new SimpleChange(null, mockStaffProfile, true)
-      }
-    );
+    component.ngOnChanges({
+      profile: new SimpleChange(null, mockStaffProfile, true),
+    });
     expect(getStaffProfileSpy).toHaveBeenCalled();
   });
 
@@ -75,23 +78,28 @@ describe('ContactTabComponent', () => {
     ).nativeElement;
     discardChangesBtn.click();
     fixture.detectChanges();
-    expect(spy).toBeCalledWith(expect.objectContaining({
-      'heading': `Leave this page?`
-    }))
+    expect(spy).toBeCalledWith(
+      expect.objectContaining({
+        heading: `Leave this page?`,
+      })
+    );
   });
 
   it('should call update call with valid details ', async () => {
-    const saveLearnerProfileSpy = jest.spyOn(staffProfileService, 'updateProfile');
+    const saveLearnerProfileSpy = jest.spyOn(
+      staffProfileService,
+      'updateProfile'
+    );
     component.contactDetailsForm.setValue({
       email: 'abc@test.com',
       phoneNumber: '(365) 123-4453',
-      inboxes: 'instructors@snhu.edu'
+      inboxes: 'instructors@snhu.edu',
     });
     const updateDetails = {
       phoneNumber: '(365) 123-4453',
-    }
+    };
     const mockResponse = mockStaffProfile;
-    mockResponse['phoneNumber'] = "(365) 123-4452";
+    mockResponse['phoneNumber'] = '(365) 123-4452';
     await component.saveStaffProfile();
     expect(component.contactDetailsForm.valid).toBeTruthy();
     expect(saveLearnerProfileSpy).toHaveBeenCalledWith(
@@ -105,10 +113,10 @@ describe('ContactTabComponent', () => {
     component.contactDetailsForm.setValue({
       email: 'abc@test.com',
       phoneNumber: '(365) 123-4453',
-      inboxes: 'instructors@snhu.edu'
+      inboxes: 'instructors@snhu.edu',
     });
     const mockResponse = mockStaffProfile;
-    mockResponse['phoneNumber'] = "(365) 123-4452";
+    mockResponse['phoneNumber'] = '(365) 123-4452';
     await component.saveStaffProfile();
     expect(showBannerSpy).toBeCalled();
   });

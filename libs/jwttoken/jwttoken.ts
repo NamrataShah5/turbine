@@ -1,12 +1,29 @@
 import jwt_decode from 'jwt-decode';
 
 export interface IDecodedToken {
-  [key: string]: string;
+  iss: string;
+  aud: string;
+  auth_time: number;
+  user_id: string;
+  sub: string;
+  iat: number;
+  exp?: number;
+  email?: string;
+  email_verified: boolean;
+  firebase: {
+    identities: {
+      email: string[];
+    };
+    sign_in_provider?: string;
+  };
+  displayname?: string;
+  given_name?: string;
+  family_name?: string;
 }
 
 export class JWTToken {
   jwtToken = '';
-  private decodedToken: IDecodedToken = {};
+  private decodedToken: Partial<IDecodedToken> = {};
 
   constructor(token: string) {
     this.jwtToken = token;
@@ -19,7 +36,7 @@ export class JWTToken {
     return this.jwtToken;
   }
 
-  decodeToken(): IDecodedToken {
+  decodeToken(): Partial<IDecodedToken> {
     if (this.jwtToken) {
       this.decodedToken = jwt_decode(this.jwtToken);
     }
@@ -40,17 +57,17 @@ export class JWTToken {
     return this.decodedToken ? this.decodedToken['email'] : null;
   }
 
-  getExpiryTime() {
+  getExpiryTime(): number {
     this.decodeToken();
-    return this.decodedToken ? this.decodedToken['exp'] : '0';
+    return this.decodedToken?.exp || 0;
   }
 
   isTokenExpired(): boolean {
-    const expiryTime: number = parseInt(this.getExpiryTime());
+    const expiryTime = Number(this.getExpiryTime());
     if (expiryTime) {
       return 1000 * expiryTime - new Date().getTime() < 5000;
-    } else {
-      return false;
     }
+
+    return false;
   }
 }

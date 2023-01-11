@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { AssessmentDetailsComponent } from './assessment-details.component';
 
@@ -9,6 +11,7 @@ describe('AssessmentDetailsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AssessmentDetailsComponent],
+      imports: [SharedModule, NoopAnimationsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AssessmentDetailsComponent);

@@ -11,4 +11,9 @@
 .container {
   height: 10em;
   position: relative;
+  .login-container {
+    display: flex;
+    grid-gap: 50px;
+    align-items: center;
+  }
 }

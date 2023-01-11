@@ -6,8 +6,10 @@ import { AuthenticationService } from './authentication.service';
 
 describe('AuthenticationController', () => {
   let app: TestingModule;
+  let service: AuthenticationService;
   const mockService = {
-    sendPasswordResetEmail: () => {""}
+    sendPasswordResetEmail: () => {""},
+    loginWithCredentials: (username,password) => {""}
   };
   beforeAll(async () => {
     app = await Test.createTestingModule({
@@ -26,6 +28,7 @@ describe('AuthenticationController', () => {
       .overrideProvider(AuthenticationService)
       .useValue(mockService)
       .compile();
+      service = app.get<AuthenticationService>(AuthenticationService);
   });
   it('should be defined', () => {
     const controller = app.get<AuthenticationController>(
@@ -40,7 +43,20 @@ describe('AuthenticationController', () => {
       const controller = app.get<AuthenticationController>(
         AuthenticationController
       );
-      await (expect(controller.sendPasswordResetEmail(mockQuery))).toBeUndefined()
+      await (expect(controller.sendPasswordResetEmail(mockQuery))).toBeUndefined();
+      expect(service.loginWithCredentials)
+    });
+  });
+
+  describe('loginwithcreds', () => {
+    const mockQuery = {email: "somemail@email.com", password: 'test'};
+    const spy  = jest.spyOn(mockService,'loginWithCredentials')
+    it('should throw error', async () => {
+      const controller = app.get<AuthenticationController>(
+        AuthenticationController
+      );
+      await controller.loginWithCredentials(mockQuery);
+      expect(spy).toBeCalled();
     });
   });
 });

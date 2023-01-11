@@ -1,5 +1,6 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
@@ -7,6 +8,7 @@ import { IUser } from '@toboggan-ws/toboggan-common';
 import * as firebase from 'firebase/app';
 import { getAuth, OAuthProvider, signInWithPopup } from 'firebase/auth';
 import { JWTToken } from 'libs/jwttoken/jwttoken';
+import { firstValueFrom } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { ModalAlertService } from '../services/modal-alert/modal-alert.service';
@@ -26,7 +28,8 @@ export class AuthService {
     private activityMonitor: ActivityMonitorService,
     public afAuth: AngularFireAuth,
     public modalAlertService: ModalAlertService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.app = firebase.initializeApp(environment.firebase);
     this.auth = getAuth(this.app);
@@ -104,6 +107,7 @@ export class AuthService {
         const idToken = credential.idToken ?? '';
         this.setSsoTokenJwt(idToken);
       }
+      localStorage.setItem('IDP-Override', 'false');
 
       await this.router.navigate(['']);
     } catch (error) {
@@ -159,6 +163,7 @@ export class AuthService {
     this.auth.signOut().then(() => {
       this.removeTokenJwts();
       localStorage.removeItem('lastActivity');
+      localStorage.removeItem('IDP-Override');
 
       this.activityMonitor.unsubscribe('inactive', this.signOut.bind(this));
       this.activityMonitor.unsubscribe(
@@ -205,4 +210,23 @@ export class AuthService {
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) return JSON.parse(currentUser);
   }
+
+  loginWithCreds = async (email: string, password: string) => {
+    try {
+      localStorage.setItem('IDP-Override', 'true');
+      const data: any = await firstValueFrom(
+        this.http.post(`api/authentication/loginwithcreds`, {
+          email: email,
+          password: password,
+        })
+      );
+      if (data !== null) {
+        const idToken = data?.idToken ?? '';
+        this.setSsoTokenJwt(idToken);
+      }
+      await this.router.navigate(['']);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 }

@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -15,17 +16,17 @@ describe('OnboardingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OnboardingComponent ],
+      declarations: [OnboardingComponent],
       imports: [
         StoriesModule,
         SharedModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireAuthModule,
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientModule,
       ],
-      providers: [AuthService]
-    })
-    .compileComponents();
+      providers: [AuthService],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(OnboardingComponent);
     component = fixture.componentInstance;
@@ -48,4 +49,3 @@ describe('OnboardingComponent', () => {
     expect(component.onboardingModal.close).toHaveBeenCalled();
   });
 });
-

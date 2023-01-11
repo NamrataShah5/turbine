@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -16,6 +17,7 @@ describe('LoginComponent', () => {
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireAuthModule,
         RouterTestingModule,
+        HttpClientModule,
       ],
       declarations: [LoginComponent],
       providers: [ActivityMonitorService],

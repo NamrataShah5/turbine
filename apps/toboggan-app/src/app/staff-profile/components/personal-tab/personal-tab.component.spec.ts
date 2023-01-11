@@ -1,4 +1,8 @@
-import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpClientModule,
+  HttpHandler,
+} from '@angular/common/http';
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -7,6 +11,7 @@ import { mock, MockProxy } from 'jest-mock-extended';
 import { of } from 'rxjs';
 import { BannerService } from '../../../shared/services/banner/banner.service';
 import { ModalAlertService } from '../../../shared/services/modal-alert/modal-alert.service';
+import { SharedModule } from '../../../shared/shared.module';
 import { mockStaffProfile } from '../../pages/staff-profile-main.mock';
 import { StaffProfileService } from '../../services/staff-profile.service';
 
@@ -18,11 +23,11 @@ describe('PersonalTabComponent', () => {
   let modalAlertService: ModalAlertService;
   let staffProfileService: StaffProfileService;
 
-  const mockStaffProfileService: MockProxy<StaffProfileService> = mock<StaffProfileService>();
+  const mockStaffProfileService: MockProxy<StaffProfileService> =
+    mock<StaffProfileService>();
   const mockBannerService = {
     showBanner: jest.fn().mockReturnValueOnce(of(true)),
   };
-
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -30,12 +35,11 @@ describe('PersonalTabComponent', () => {
         HttpClient,
         HttpHandler,
         { provide: StaffProfileService, useValue: mockStaffProfileService },
-        { provide: BannerService, useValue: mockBannerService }
+        { provide: BannerService, useValue: mockBannerService },
       ],
       declarations: [PersonalTabComponent],
-      imports: [ReactiveFormsModule, HttpClientModule]
-    })
-      .compileComponents();
+      imports: [ReactiveFormsModule, HttpClientModule, SharedModule],
+    }).compileComponents();
 
     modalAlertService = TestBed.inject(ModalAlertService);
     fixture = TestBed.createComponent(PersonalTabComponent);
@@ -48,11 +52,9 @@ describe('PersonalTabComponent', () => {
   it('should create', () => {
     const getStaffProfileSpy = jest.spyOn(component, 'setDetailsForm');
     expect(component).toBeTruthy();
-    component.ngOnChanges(
-      {
-        profile: new SimpleChange(null, mockStaffProfile, true)
-      }
-    );
+    component.ngOnChanges({
+      profile: new SimpleChange(null, mockStaffProfile, true),
+    });
     expect(getStaffProfileSpy).toHaveBeenCalled();
   });
 
@@ -75,7 +77,9 @@ describe('PersonalTabComponent', () => {
     const pronoun = 'he/him/his';
     component.selectPronoun(pronoun);
     fixture.detectChanges();
-    expect(component.personalDetailsForm.get('preferredPronoun')?.value).toEqual(pronoun);
+    expect(
+      component.personalDetailsForm.get('preferredPronoun')?.value
+    ).toEqual(pronoun);
   });
 
   it('should open discard changes confirmation modal', () => {
@@ -88,27 +92,32 @@ describe('PersonalTabComponent', () => {
     ).nativeElement;
     discardChangesBtn.click();
     fixture.detectChanges();
-    expect(spy).toBeCalledWith(expect.objectContaining({
-      'heading': `Leave this page?`
-    }))
+    expect(spy).toBeCalledWith(
+      expect.objectContaining({
+        heading: `Leave this page?`,
+      })
+    );
   });
 
   it('should call update call with valid details ', async () => {
-    const saveLearnerProfileSpy = jest.spyOn(staffProfileService, 'updateProfile');
+    const saveLearnerProfileSpy = jest.spyOn(
+      staffProfileService,
+      'updateProfile'
+    );
     component.personalDetailsForm.setValue({
       firstName: 'Down',
       lastName: 'Hall',
       preferredName: 'Down Hall',
       preferredPronoun: 'she/her/hers',
-      bio: "hi am a staff"
+      bio: 'hi am a staff',
     });
     const updateDetails = {
-      preferredName: "Down Hall",
-      preferredPronoun: "she/her/hers",
-      bio: "hi am a staff"
-    }
+      preferredName: 'Down Hall',
+      preferredPronoun: 'she/her/hers',
+      bio: 'hi am a staff',
+    };
     const mockResponse = mockStaffProfile;
-    mockResponse['preferredName'] = "Down";
+    mockResponse['preferredName'] = 'Down';
     await component.saveStaffProfile();
     expect(component.personalDetailsForm.valid).toBeTruthy();
     expect(saveLearnerProfileSpy).toHaveBeenCalledWith(
@@ -124,10 +133,10 @@ describe('PersonalTabComponent', () => {
       lastName: 'Hall',
       preferredName: 'Down Hall',
       preferredPronoun: 'she/her/hers',
-      bio: "hi am a staff"
+      bio: 'hi am a staff',
     });
     const mockResponse = mockStaffProfile;
-    mockResponse['preferredName'] = "Down";
+    mockResponse['preferredName'] = 'Down';
     await component.saveStaffProfile();
     expect(showBannerSpy).toBeCalled();
   });

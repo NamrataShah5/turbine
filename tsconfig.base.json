@@ -20,7 +20,8 @@
       "@toboggan-ws/toboggan-constants": [
         "libs/toboggan-constants/src/index.ts"
       ],
-      "@utils" : ["apps/toboggan-api/src/app/utils"]
+      "@utils" : ["apps/toboggan-api/src/app/utils"],
+      "@jwttoken": ["libs/jwttoken"]
     }
   },
   "exclude": ["node_modules", "tmp"]
