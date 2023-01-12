@@ -26,8 +26,11 @@ export interface IAssessment {
   comments: any;
   similarity: number;
   similarityUrl: string;
+  discipline: string;
+  unit: string;
   evaluated: boolean;
   flagged: boolean;
+  evaluatedBy: string;
 }
 
 export type INewGroup = Omit<IGroup, 'id'>;

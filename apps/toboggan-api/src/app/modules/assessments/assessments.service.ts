@@ -37,6 +37,9 @@ export class AssessmentsService {
         evaluated: false,
         flagged: true,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '2',
@@ -55,6 +58,9 @@ export class AssessmentsService {
         similarityUrl: 'https://google.com',
         evaluated: false,
         flagged: false,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson',
         comments: [
           {
             comment: 'adfsdgsgd',
@@ -82,6 +88,9 @@ export class AssessmentsService {
         evaluated: false,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '4',
@@ -101,6 +110,9 @@ export class AssessmentsService {
         evaluated: false,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '5',
@@ -120,6 +132,9 @@ export class AssessmentsService {
         evaluated: false,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '6',
@@ -139,6 +154,9 @@ export class AssessmentsService {
         evaluated: false,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '7',
@@ -159,6 +177,9 @@ export class AssessmentsService {
         evaluated: true,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '8',
@@ -178,6 +199,9 @@ export class AssessmentsService {
         evaluated: true,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '9',
@@ -197,6 +221,9 @@ export class AssessmentsService {
         evaluated: true,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '10',
@@ -216,6 +243,9 @@ export class AssessmentsService {
         evaluated: true,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '11',
@@ -235,6 +265,9 @@ export class AssessmentsService {
         evaluated: true,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
       {
         id: '12',
@@ -254,6 +287,9 @@ export class AssessmentsService {
         evaluated: true,
         flagged: false,
         comments: null,
+        discipline: 'IDS',
+        unit: 'Analyze Written Works',
+        evaluatedBy: 'James Robertson'
       },
     ];
   }
