@@ -2,10 +2,20 @@ import {
   TableColumnAlignmentEnum,
   TableColumnDataTypeEnum,
   TableColumnDisplayMetadatum,
-  TableColumnSortStateEnum,
+  TableColumnSortStateEnum
 } from '@snhuproduct/toboggan-ui-components-library';
 
-export const evaluatedAssessmentTableHeader: TableColumnDisplayMetadatum[] = [
+export const evaluationBacklogTableHeader: TableColumnDisplayMetadatum[] = [
+  {
+    title: 'Time left',
+    dataKey: 'time_left',
+    parents: '',
+    defaultSort: true,
+    searchableField: true,
+    sort: TableColumnSortStateEnum.Descending,
+    alignment: TableColumnAlignmentEnum.Left,
+    dataType: TableColumnDataTypeEnum.TextNowrap,
+  },
   {
     title: 'Learner',
     dataKey: 'learner',
@@ -15,17 +25,7 @@ export const evaluatedAssessmentTableHeader: TableColumnDisplayMetadatum[] = [
     sort: TableColumnSortStateEnum.Disabled,
   },
   {
-    title: 'Result',
-    dataKey: 'result',
-    parents: '',
-    defaultSort: true,
-    searchableField: true,
-    sort: TableColumnSortStateEnum.Descending,
-    alignment: TableColumnAlignmentEnum.Left,
-    dataType: TableColumnDataTypeEnum.Text,
-  },
-  {
-    title: 'Competency',
+    title: 'Unit',
     dataKey: 'competency',
     parents: '',
     defaultSort: true,
@@ -59,14 +59,16 @@ export const evaluatedAssessmentTableHeader: TableColumnDisplayMetadatum[] = [
     searchableField: true,
     alignment: TableColumnAlignmentEnum.Left,
     dataType: TableColumnDataTypeEnum.TextNowrap,
+    
   },
   {
-    title: 'Similarity',
-    dataKey: 'similarity',
+    title: 'Assigned To',
+    dataKey: 'assignedTo',
     parents: '',
     defaultSort: true,
     searchableField: true,
-    alignment: TableColumnAlignmentEnum.Center,
-    dataType: TableColumnDataTypeEnum.PercentLink,
-  },
+    alignment: TableColumnAlignmentEnum.Left,
+    dataType: TableColumnDataTypeEnum.TextNowrap,
+    sticky: true
+  }
 ];

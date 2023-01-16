@@ -1,15 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   TableDataGenerator,
   TableRow
 } from '@snhuproduct/toboggan-ui-components-library';
 import { IRowActionEvent } from '@snhuproduct/toboggan-ui-components-library/lib/table/row-action-event.interface';
-import {
-  getDateDiffObject,
-  getFormattedDateDiff,
-  IAssessment
-} from '@toboggan-ws/toboggan-common';
+import { getDateDiffObject, getFormattedDateDiff, getTimeleftColor, IAssessment } from '@toboggan-ws/toboggan-common';
 import { Observable, Subscription } from 'rxjs';
 import { BannerService } from '../../../shared/services/banner/banner.service';
 import { ModalAlertService } from '../../../shared/services/modal-alert/modal-alert.service';
@@ -18,15 +14,14 @@ import {
   TableDataService
 } from '../../../shared/services/table-data/table-data.service';
 import { AssessmentService } from '../../services/assessment.service';
-import { assessmentTableHeader, RowActions } from './assessment-table.type';
-const THRESHOLD_OF_RED = 0;
-const THRESHOLD_OF_YELLOW = 6 * 60 * 60 * 1000; // 6 hours
+import { RowActions } from '../assessment-list/assessment-table.type';
+import { evaluationBacklogTableHeader } from './evaluation-backlog-table.type';
 
 @Component({
-  selector: 'toboggan-ws-assessment-list',
-  templateUrl: './assessment-list.component.html',
+  selector: 'toboggan-ws-evaluation-backlog',
+  templateUrl: './evaluation-backlog.component.html',
 })
-export class AssessmentListComponent implements OnInit, OnDestroy {
+export class EvaluationBacklogComponent implements OnInit, OnDestroy {
   dataGenerator: TableDataGenerator = {} as TableDataGenerator;
   assessmentList: TableRow[] = [];
   currentPage = 1;
@@ -37,8 +32,8 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
   private dataGeneratorFactoryOutputObserver: Observable<ITableDataGeneratorFactoryOutput> =
     {} as Observable<ITableDataGeneratorFactoryOutput>;
   private datageneratorSubscription: Subscription = {} as Subscription;
-  private updateAssessmentSubscription: Subscription = {} as Subscription;
-  @Input() selectedTab = 'toBeEvaluate';
+  private updateEvaluationBacklogAssessmentSubscription: Subscription =
+    {} as Subscription;
 
   constructor(
     private assessmentService: AssessmentService,
@@ -53,11 +48,102 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    [this.datageneratorSubscription, this.updateAssessmentSubscription].map(
-      (s) => {
-        if (s.unsubscribe) s.unsubscribe();
-      }
-    );
+    [
+      this.datageneratorSubscription,
+      this.updateEvaluationBacklogAssessmentSubscription,
+    ].map((s) => {
+      if (s.unsubscribe) s.unsubscribe();
+    });
+  }
+
+  getActionMenuItems = (rowData: TableRow) => {
+    const actionMenuItems = [
+      `Evaluate for ${rowData.cellData['assignedTo']}`,
+      RowActions.ReturnUnEvaluated,
+    ];
+    if (rowData.cellData['flagged']) {
+      actionMenuItems.push(RowActions.RemoveFlag);
+    } else {
+      actionMenuItems.push(RowActions.FlagForInstructorReview);
+    }
+    return actionMenuItems;
+  };
+
+
+  formatTableRowsWithAssessmentsData(fetchedData: unknown): TableRow[] {
+    const assessments = fetchedData as IAssessment[];
+    const data = assessments.map((cellData, index) => {
+      const dateDiffObj = getDateDiffObject(cellData.timeLeft, new Date());
+      const timeLeftCellColor = getTimeleftColor(dateDiffObj);
+      const pausedTimeLeftCellObject = {
+        value: 'Paused',
+        cellType: 'icon-right',
+        cellTypeOptions: {
+          icon: 'gp-icon-lock',
+          iconClass: 'gp-fill-cool-gray-100',
+        },
+      };
+      const defaultTimeLeftCellObject = {
+        value: getFormattedDateDiff(dateDiffObj),
+        cellClass: timeLeftCellColor,
+      };
+      const timeLeftCellObject = cellData.flagged
+        ? pausedTimeLeftCellObject
+        : defaultTimeLeftCellObject;
+      const actionIcon = cellData.flagged ? 'gp-icon-flag' : '';
+      return {
+        rowId: String(index + 1),
+        actionIcon,
+        cellData: {
+          time_left: timeLeftCellObject,  
+          uuid: cellData.uuid,
+          learner: cellData.learner,
+          learnerId: cellData.learnerId,
+          flagged: cellData.flagged,
+          competency: cellData.competency,
+          type: cellData.type,
+          attempt: [cellData.currentAttempt, cellData.attempts],
+          instructor: cellData.instructor,
+          assignedTo: cellData.assignedTo,
+        },
+      };
+    });
+
+    return data as TableRow[];
+  }
+
+
+  
+
+  private refreshTableData() {
+    if (this.datageneratorSubscription.unsubscribe) {
+      this.datageneratorSubscription.unsubscribe();
+    }
+    const [prevSearchString, prevCurrentPage] = [
+      this.dataGenerator.searchString || '',
+      this.dataGenerator.currentPage || this.currentPage,
+    ];
+    this.dataGeneratorFactoryOutputObserver =
+      this.tableDataService.dataGeneratorFactoryObs(
+        this.assessmentService.fetchEvaluationBacklog(),
+        evaluationBacklogTableHeader,
+        this.formatTableRowsWithAssessmentsData,
+        this.itemsPerPage,
+        prevCurrentPage,
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        () => {},
+        []
+      );
+    this.datageneratorSubscription =
+      this.dataGeneratorFactoryOutputObserver.subscribe(
+        (dataGeneratorFactoryOutput) => {
+          this.dataGenerator = dataGeneratorFactoryOutput.dataGenerator;
+          this.assessmentList =
+            dataGeneratorFactoryOutput.tableRows as TableRow[];
+              this.assessmentService.passAllPendingListCount(this.assessmentList.length);
+          this.dataGenerator.searchString = prevSearchString;
+        }
+      );  
   }
 
   onRowAction(event: IRowActionEvent) {
@@ -65,8 +151,12 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     const rowData = this.dataGenerator.rowData.find(
       (row) => row.rowId === rowId
     );
+
     if (!rowData) {
       throw new Error('Could not find rowData for rowId: ' + rowId);
+    }
+    if (action.startsWith('Evaluate for')) {
+      this.router.navigate([`/assessment/details/${rowId}`])
     }
 
     switch (action) {
@@ -80,134 +170,17 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
         this.showAssessmentModal = true;
         this.selectedOption = RowActions.ReturnUnEvaluated;
         break;
-      case RowActions.Evaluate:
-        this.router.navigate([`/assessment/details/${rowId}`]);
-        break;
       case RowActions.RemoveFlag:
         this.unFlagConfirmationModal(rowData);
         break;
     }
   }
-
-  handleAssessmentAction(id: string | undefined) {
+  handleEditFlagAssessmentAction(id: string | undefined) {
     if (this.selectedOption === RowActions.ReturnUnEvaluated && id) {
       this.refreshTableData();
     }
     this.showAssessmentModal = false;
   }
-
-  getActionMenuItems = (rowData: TableRow) => {
-    const actionMenuItems = [RowActions.ReturnUnEvaluated];
-    if (rowData.cellData['flagged']) {
-      actionMenuItems.push(RowActions.RemoveFlag);
-    } else {
-      actionMenuItems.push(RowActions.FlagForInstructorReview);
-    }
-    return this.selectedTab === 'toBeEvaluate'
-      ? [...actionMenuItems, RowActions.Evaluate]
-      : actionMenuItems;
-  };
-
-  formatTableRowsWithAssessmentData(fetchedData: unknown): TableRow[] {
-    //API call
-    const assessments = fetchedData as IAssessment[];
-
-    const data = assessments.map((cellData, index) => {
-      const actionIcon = cellData.flagged ? 'gp-icon-flag' : '';
-      const className = cellData.flagged ? 'gp-table-x-bodyrow-diabled' : '';
-      const dateDiffObj = getDateDiffObject(cellData.timeLeft, new Date());
-
-      const timeLeftCellColor =
-        dateDiffObj.diff < THRESHOLD_OF_RED
-          ? 'gp-red-20'
-          : dateDiffObj.diff >= THRESHOLD_OF_RED &&
-            dateDiffObj.diff < THRESHOLD_OF_YELLOW
-          ? 'gp-yellow-20'
-          : '';
-
-      const attemptBorderCellClass = cellData.currentAttempt > cellData.attempts
-        ? 'gp-table-x-cell-warning-border'
-        : '';
-
-      const pausedTimeLeftCellObject = {
-        value: 'Paused',
-        cellType: 'icon-right',
-        cellTypeOptions: {
-          icon: 'gp-icon-lock',
-          iconClass: 'gp-fill-cool-gray-100',
-        },
-      };
-
-      const defaultTimeLeftCellObject = {
-        value: getFormattedDateDiff(dateDiffObj),
-        cellClass: timeLeftCellColor,
-      };
-
-      const timeLeftCellObject = cellData.flagged
-        ? pausedTimeLeftCellObject
-        : defaultTimeLeftCellObject;
-
-      return {
-        rowId: String(index + 1),
-        actionIcon,
-        className,
-        cellData: {
-          id: cellData.id,
-          uuid: cellData.uuid,
-          time_left: timeLeftCellObject,
-          learner: cellData.learner,
-          learnerId: cellData.learnerId,
-          competency: cellData.competency,
-          type: cellData.type,
-          flagged: cellData.flagged,
-          attempt: {
-            0: cellData.currentAttempt,
-            1: cellData.attempts,
-            cellClass: attemptBorderCellClass,
-          },
-          instructor: cellData.instructor,
-          assignedTo: cellData.assignedTo,
-        },
-      };
-    });
-
-    return data as TableRow[];
-  }
-
-  private refreshTableData() {
-    if (this.datageneratorSubscription.unsubscribe) {
-      this.datageneratorSubscription.unsubscribe();
-    }
-
-    const [prevSearchString, prevCurrentPage] = [
-      this.dataGenerator.searchString || '',
-      this.dataGenerator.currentPage || this.currentPage,
-    ];
-
-    this.dataGeneratorFactoryOutputObserver =
-      this.tableDataService.dataGeneratorFactoryObs(
-        this.assessmentService.fetchAssessments(),
-        assessmentTableHeader,
-        this.formatTableRowsWithAssessmentData,
-        this.itemsPerPage,
-        prevCurrentPage,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        () => {},
-        []
-      );
-
-    this.datageneratorSubscription =
-      this.dataGeneratorFactoryOutputObserver.subscribe(
-        (dataGeneratorFactoryOutput) => {
-          this.dataGenerator = dataGeneratorFactoryOutput.dataGenerator;
-          this.assessmentList =
-            dataGeneratorFactoryOutput.tableRows as TableRow[];
-            this.assessmentService.passmyPendingListCount(this.assessmentList.length);
-          this.dataGenerator.searchString = prevSearchString;
-        }
-      );
-  }
-
   unFlagConfirmationModal(rowData: any) {
     this.modalAlertService.showModalAlert({
       type: 'warning',

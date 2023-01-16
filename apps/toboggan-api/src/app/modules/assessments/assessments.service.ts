@@ -32,11 +32,10 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 3,
         instructor: 'Christopher Edwards',
-        similarity: 0.27,
-        similarityUrl: 'https://google.com',
         evaluated: false,
         flagged: true,
         comments: null,
+        assignedTo: 'Dawn Hall',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -54,8 +53,6 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 1,
         instructor: 'Julia De La Cruz',
-        similarity: 0.89,
-        similarityUrl: 'https://google.com',
         evaluated: false,
         flagged: false,
         discipline: 'IDS',
@@ -69,6 +66,7 @@ export class AssessmentsService {
             author: 'string',
           },
         ],
+        assignedTo: 'Christopher Edwards'
       },
       {
         id: '3',
@@ -83,11 +81,10 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 1,
         instructor: 'Dawn Hall',
-        similarity: 0.1,
-        similarityUrl: 'https://google.com',
         evaluated: false,
         flagged: false,
         comments: null,
+        assignedTo: 'Christopher Edwards',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -105,11 +102,10 @@ export class AssessmentsService {
         currentAttempt: 4,
         attempts: 3,
         instructor: 'Christopher Edwards',
-        similarity: 0.27,
-        similarityUrl: 'https://google.com',
         evaluated: false,
         flagged: false,
         comments: null,
+        assignedTo: 'Dawn Hall',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -127,11 +123,10 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 1,
         instructor: 'Julia De La Cruz',
-        similarity: 0.89,
-        similarityUrl: 'https://google.com',
         evaluated: false,
         flagged: false,
         comments: null,
+        assignedTo: 'Christopher Edwards',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -149,11 +144,10 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 1,
         instructor: 'Dawn Hall',
-        similarity: 0.1,
-        similarityUrl: 'https://google.com',
         evaluated: false,
         flagged: false,
         comments: null,
+        assignedTo: 'Christopher Edwards',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -172,11 +166,10 @@ export class AssessmentsService {
         currentAttempt: 3,
         attempts: 3,
         instructor: 'Christopher Edwards',
-        similarity: 0.27,
-        similarityUrl: 'https://google.com',
         evaluated: true,
         flagged: false,
         comments: null,
+        assignedTo: 'Dawn Hall',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -194,11 +187,10 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 1,
         instructor: 'Julia De La Cruz',
-        similarity: 0.89,
-        similarityUrl: 'https://google.com',
         evaluated: true,
         flagged: false,
         comments: null,
+        assignedTo: 'Christopher Edwards',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -216,11 +208,10 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 1,
         instructor: 'Dawn Hall',
-        similarity: 0.1,
-        similarityUrl: 'https://google.com',
         evaluated: true,
         flagged: false,
         comments: null,
+        assignedTo: 'Christopher Edwards',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -238,11 +229,10 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 3,
         instructor: 'Christopher Edwards',
-        similarity: 0.27,
-        similarityUrl: 'https://google.com',
         evaluated: true,
         flagged: false,
         comments: null,
+        assignedTo: 'Dawn Hall',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -260,11 +250,10 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 1,
         instructor: 'Julia De La Cruz',
-        similarity: 0.89,
-        similarityUrl: 'https://google.com',
         evaluated: true,
         flagged: false,
         comments: null,
+        assignedTo: 'Christopher Edwards',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -282,11 +271,10 @@ export class AssessmentsService {
         currentAttempt: 1,
         attempts: 1,
         instructor: 'Dawn Hall',
-        similarity: 0.1,
-        similarityUrl: 'https://google.com',
         evaluated: true,
         flagged: false,
         comments: null,
+        assignedTo: 'Christopher Edwards',
         discipline: 'IDS',
         unit: 'Analyze Written Works',
         evaluatedBy: 'James Robertson'
@@ -295,6 +283,15 @@ export class AssessmentsService {
   }
 
   getAssessments() {
+    return {
+      data: {
+        data: this.assessments.filter((assessment) => !assessment.evaluated),
+        success: true,
+      },
+    };
+  }
+
+  getEvaluationBacklogAssessments() {
     return {
       data: {
         data: this.assessments.filter((assessment) => !assessment.evaluated),

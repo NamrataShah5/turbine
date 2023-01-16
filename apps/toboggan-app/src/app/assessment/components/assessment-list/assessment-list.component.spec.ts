@@ -4,7 +4,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import {
   StoriesModule,
-  TableDataGenerator,
+  TableDataGenerator
 } from '@snhuproduct/toboggan-ui-components-library';
 import { of } from 'rxjs';
 import { AssessmentService } from '../../services/assessment.service';
@@ -30,6 +30,7 @@ describe('AssessmentListComponent with empty results ', () => {
       similarityUrl: 'https://google.com',
       evaluated: false,
       flagged: true,
+      assignedTo: 'Christopher Edwards'
     },
   ];
   const mockAssessmentService = {

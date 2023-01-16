@@ -8,8 +8,8 @@ import { SharedModule } from '../shared/shared.module';
 import { assessmentRouting } from './assessment.routing';
 import { AllEvaluationsListComponent } from './components/all-evaluations-list/all-evaluations-list.component';
 import { AssessmentDetailsComponent } from './components/assessment-details/assessment-details.component';
-import { AssessmentEvaluatedListComponent } from './components/assessment-evaluated-list/assessment-evaluated-list.component';
 import { AssessmentListComponent } from './components/assessment-list/assessment-list.component';
+import { EvaluationBacklogComponent } from './components/evaluation-backlog/evaluation-backlog.component';
 import { FlagAssessmentComponent } from './components/flag-assessment/flag-assessment.component';
 import { MyEvaluationsListComponent } from './components/my-evaluations-list/my-evaluations-list.component';
 import { AssessmentMainPageComponent } from './pages/assessment-main-page/assessment-main-page.component';
@@ -19,7 +19,7 @@ import { EvaluatedAssessmentsComponent } from './pages/evaluated-assessments/eva
   declarations: [
     AssessmentMainPageComponent,
     AssessmentListComponent,
-    AssessmentEvaluatedListComponent,
+    EvaluationBacklogComponent,
     FlagAssessmentComponent,
     AssessmentDetailsComponent,
     EvaluatedAssessmentsComponent,
@@ -39,7 +39,7 @@ import { EvaluatedAssessmentsComponent } from './pages/evaluated-assessments/eva
   exports: [
     AssessmentMainPageComponent,
     AssessmentListComponent,
-    AssessmentEvaluatedListComponent,
+    EvaluationBacklogComponent,
   ],
 })
 export class AssessmentModule { }

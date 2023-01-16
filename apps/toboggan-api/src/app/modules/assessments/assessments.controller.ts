@@ -5,7 +5,7 @@ import {
   Param,
   Put,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import { HTTPHeaderAuthGuard } from '../auth/http-header-auth-guard.service';
 import { TokenInterceptor } from '../auth/token.interceptor';
@@ -26,9 +26,15 @@ export class AssessmentsController {
     return this.assessmentsService.getAssessments();
   }
 
+
   @Get('/evaluated')
   getEvaluatedAssessments() {
     return this.assessmentsService.getEvaluatedAssessments();
+  }
+
+  @Get('evaluation-backlog')
+  getEvaluationBacklog() {
+    return this.assessmentsService.getEvaluationBacklogAssessments();
   }
 
   // update submitted assessment

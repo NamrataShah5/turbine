@@ -5,8 +5,19 @@ interface IDateObj {
   minutes: number;
   diff: number;
 }
-
+const THRESHOLD_OF_RED = 0;
+const THRESHOLD_OF_YELLOW = 6 * 60 * 60 * 1000; // 6 hours
 type TDate = number | string | Date;
+
+export const getTimeleftColor = (dateDiffObj:IDateObj) => {
+  const timeLeftCellColor =dateDiffObj.diff < THRESHOLD_OF_RED
+   ? 'gp-red-20'
+   : dateDiffObj.diff >= THRESHOLD_OF_RED &&
+     dateDiffObj.diff < THRESHOLD_OF_YELLOW
+   ? 'gp-yellow-20'
+   : '';
+   return timeLeftCellColor;
+ };
 
 export const getDateDiffObject = (start: TDate, end: TDate) => {
   const startDate = new Date(start).getTime();
@@ -60,3 +71,5 @@ export const getFormattedDateDiff = ({
 
   return copy;
 };
+
+

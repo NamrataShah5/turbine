@@ -24,12 +24,11 @@ export interface IAssessment {
   currentAttempt: number;
   instructor: string;
   comments: any;
-  similarity: number;
-  similarityUrl: string;
-  discipline: string;
-  unit: string;
   evaluated: boolean;
   flagged: boolean;
+  assignedTo: string;
+  discipline: string;
+  unit: string;
   evaluatedBy: string;
 }
 

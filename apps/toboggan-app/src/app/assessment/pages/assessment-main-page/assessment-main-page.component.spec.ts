@@ -5,7 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { StoriesModule } from '@snhuproduct/toboggan-ui-components-library';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { of } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { SharedModule } from '../../../shared/shared.module';
 import { AssessmentListComponent } from '../../components/assessment-list/assessment-list.component';
 import { AssessmentService } from '../../services/assessment.service';
@@ -13,12 +13,14 @@ import { AssessmentMainPageComponent } from './assessment-main-page.component';
 
 const mockAssessmentService = {
   fetchAssessments: jest.fn().mockReturnValue(of({})),
+  allPendingListCount: EMPTY,
+  myPendingListCount: EMPTY,
+
 };
 
 describe('AssessmentMainPageComponent', () => {
   let component: AssessmentMainPageComponent;
   let fixture: ComponentFixture<AssessmentMainPageComponent>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -29,8 +31,7 @@ describe('AssessmentMainPageComponent', () => {
         TypeaheadModule.forRoot(),
       ],
       declarations: [AssessmentMainPageComponent, AssessmentListComponent],
-      providers: [
-        { provide: AssessmentService, useValue: mockAssessmentService },
+      providers: [ { provide: AssessmentService, useValue: mockAssessmentService},
         {
           provide: Router,
           useValue: {},
@@ -38,7 +39,6 @@ describe('AssessmentMainPageComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
-
     fixture = TestBed.createComponent(AssessmentMainPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

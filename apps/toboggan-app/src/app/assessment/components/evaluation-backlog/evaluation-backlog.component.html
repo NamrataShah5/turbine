@@ -1,0 +1,22 @@
+<div class="table-container">
+  <toboggan-ws-flag-assessment
+    [assessment]="editAssessmentData"
+    [selectedOption]="selectedOption"
+    *ngIf="showAssessmentModal"
+    (editFlagAssessmentAction)="handleEditFlagAssessmentAction($event)"
+  >
+  </toboggan-ws-flag-assessment>
+  <gp-table
+    [dataGenerator]="dataGenerator"
+    [dynamic]="true"
+    tableStyle="borders"
+    [getActionMenuItems]="getActionMenuItems"
+    noResultsLogo="gp-icon-moth"
+    noResultsHeading="...Now what?"
+    noResultsText="Thanks to your awesome evaluating skills, there’s nothing here to evaluate (for now). "
+    itemName="user evaluated assessments"
+    (onRowAction)="onRowAction($event)"
+  >
+    <ng-content select="[table-cta-right]" gp-table-cta-right></ng-content>
+  </gp-table>
+</div>
