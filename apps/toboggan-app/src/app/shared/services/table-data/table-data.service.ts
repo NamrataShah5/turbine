@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Injectable } from '@angular/core';
@@ -5,7 +6,7 @@ import {
   SingleHeaderRowTableDataGenerator,
   TableColumnDisplayMetadatum,
   TableDataGenerator,
-  TableRow,
+  TableRow
 } from '@snhuproduct/toboggan-ui-components-library';
 import { Observable, Subscription } from 'rxjs';
 import { TableSortingService } from '../table-sorting/table-sorting.service';
@@ -17,7 +18,18 @@ export interface ITableRowFilterFunc {
     searchVal?: unknown
   ): boolean;
 }
-
+export interface ITableFilter {
+  dataKey?: string;
+  items?: ITableFilterItems[];
+  title?: string;
+  type?: string;
+}
+export interface ITableFilterItems {
+  dataKey?: string;
+  itemText?: string;
+  id?: string;
+  checked?: boolean;
+}
 export interface ICelldataFormatterFunc {
   (dataArray: unknown): TableRow[];
 }
@@ -32,7 +44,7 @@ export interface ITableDataGeneratorFactoryOutput {
   providedIn: 'root',
 })
 export class TableDataService {
-  constructor(private tablesortingService: TableSortingService) {}
+  constructor(private tablesortingService: TableSortingService) { }
 
   private prevSearchString = '';
   private defaultFilterFunc(
@@ -63,18 +75,19 @@ export class TableDataService {
     cellDataFormatterFunc: ICelldataFormatterFunc,
     rowsPerPage: number,
     currentPageNumer: number,
-    updateFunc = () => {},
-    additionalFilterFuncs: ITableRowFilterFunc[] = []
+    updateFunc = () => { },
+    additionalFilterFuncs: ITableRowFilterFunc[] = [],
+    filtersSelected: ITableFilterItems[] = []
   ): Observable<ITableDataGeneratorFactoryOutput> {
     return new Observable((observer) => {
       let rowsObservableSubscription: Subscription;
       let tableRefreshed = false;
       const tableDataGeneratorFactoryOutput: ITableDataGeneratorFactoryOutput =
-        {
-          dataGenerator: {} as TableDataGenerator,
-          tableRows: [],
-          rawData: {},
-        };
+      {
+        dataGenerator: {} as TableDataGenerator,
+        tableRows: [],
+        rawData: {},
+      };
       tableDataGeneratorFactoryOutput.dataGenerator =
         new SingleHeaderRowTableDataGenerator(
           // retrieveRowData
@@ -106,7 +119,7 @@ export class TableDataService {
                 this.defaultFilterFunc,
                 ...additionalFilterFuncs,
               ];
-              const sortedAndFilteredRows = filterFuncs
+              let sortedAndFilteredRows = filterFuncs
                 .reduce(
                   (prevFilteredRows, currentFilterFunc) =>
                     prevFilteredRows.filter((aRow) =>
@@ -126,6 +139,18 @@ export class TableDataService {
                     sortDirectionCoefficient
                   )
                 );
+              if (filtersSelected.length) {
+                sortedAndFilteredRows = sortedAndFilteredRows.filter((row) =>
+                  Object.entries(row.cellData).some(([key, value]) =>
+                    filtersSelected.some(
+                      (filter) =>
+                        filter.dataKey === key &&
+                        JSON.stringify(value).includes(filter.itemText || '') && filter.checked
+                    )
+                  )
+                );
+              }
+
               tableDataGeneratorFactoryOutput.tableRows = sortedAndFilteredRows;
               const startRow = (pageNumber - 1) * rowsPerPage;
               const pageData = sortedAndFilteredRows.slice(
@@ -153,5 +178,34 @@ export class TableDataService {
         },
       };
     });
+  }
+  //function to set up filters in assessment table
+  setFiltersInTable(assessmentList: TableRow[], dataGenerator: TableDataGenerator) {
+    return dataGenerator.columnMetadata
+      .filter((column) => column.hasOwnProperty('filterable'))
+      .map(column => ({
+        dataKey: column.dataKey,
+        title: column.title,
+        type: "checkbox",
+        items: assessmentList
+          .reduce((acc, curr) => {
+            let value = '' as never;
+            if (column.dataKey == 'result') {
+              const data = curr.cellData[column.dataKey] as any;
+              value = data['value'] as never;
+            }
+            else {
+              value = curr.cellData[column.dataKey] as never;
+            }
+            if (!acc.includes(value)) {
+              acc.push(value);
+            }
+            return acc;
+          }, [])
+          .map((filter, index) => ({
+            itemText: filter,
+            id: `${index + 1}`
+          })),
+      }));
   }
 }

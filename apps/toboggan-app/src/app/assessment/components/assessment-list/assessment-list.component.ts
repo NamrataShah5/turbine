@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -15,6 +16,8 @@ import { BannerService } from '../../../shared/services/banner/banner.service';
 import { ModalAlertService } from '../../../shared/services/modal-alert/modal-alert.service';
 import {
   ITableDataGeneratorFactoryOutput,
+  ITableFilter,
+  ITableFilterItems,
   TableDataService
 } from '../../../shared/services/table-data/table-data.service';
 import { AssessmentService } from '../../services/assessment.service';
@@ -34,6 +37,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
   showAssessmentModal = false;
   editAssessmentData!: IAssessment;
   selectedOption!: RowActions;
+  filters: ITableFilter[] = [];
   private dataGeneratorFactoryOutputObserver: Observable<ITableDataGeneratorFactoryOutput> =
     {} as Observable<ITableDataGeneratorFactoryOutput>;
   private datageneratorSubscription: Subscription = {} as Subscription;
@@ -46,7 +50,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     private router: Router,
     private modalAlertService: ModalAlertService,
     private bannerService: BannerService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.refreshTableData();
@@ -122,12 +126,20 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
           ? 'gp-red-20'
           : dateDiffObj.diff >= THRESHOLD_OF_RED &&
             dateDiffObj.diff < THRESHOLD_OF_YELLOW
-          ? 'gp-yellow-20'
-          : '';
+            ? 'gp-yellow-20'
+            : '';
 
-      const attemptBorderCellClass = cellData.currentAttempt > cellData.attempts
-        ? 'gp-table-x-cell-warning-border'
-        : '';
+      const similarityColor =
+        cellData.similarity < 0.27
+          ? 'gp-green-80'
+          : cellData.similarity >= 0.27 && cellData.similarity < 0.89
+            ? 'gp-yellow-80'
+            : 'gp-red-80';
+
+      const attemptBorderCellClass =
+        cellData.currentAttempt > cellData.attempts
+          ? 'gp-table-x-cell-warning-border'
+          : '';
 
       const pausedTimeLeftCellObject = {
         value: 'Paused',
@@ -174,7 +186,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     return data as TableRow[];
   }
 
-  private refreshTableData() {
+  private refreshTableData(filtersSelected: ITableFilterItems[] = []) {
     if (this.datageneratorSubscription.unsubscribe) {
       this.datageneratorSubscription.unsubscribe();
     }
@@ -192,8 +204,9 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
         this.itemsPerPage,
         prevCurrentPage,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        () => {},
-        []
+        () => { },
+        [],
+        filtersSelected
       );
 
     this.datageneratorSubscription =
@@ -202,7 +215,8 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
           this.dataGenerator = dataGeneratorFactoryOutput.dataGenerator;
           this.assessmentList =
             dataGeneratorFactoryOutput.tableRows as TableRow[];
-            this.assessmentService.passmyPendingListCount(this.assessmentList.length);
+          if (this.assessmentList.length) this.setFilterOptions();
+          this.assessmentService.passmyPendingListCount(this.assessmentList.length);
           this.dataGenerator.searchString = prevSearchString;
         }
       );
@@ -254,5 +268,13 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
         },
       ],
     });
+  }
+  setFilterOptions() {
+    if (!this.filters.length) {
+      this.filters = this.tableDataService.setFiltersInTable(this.assessmentList, this.dataGenerator);
+    }
+  }
+  filterAssessmentList(filterList: ITableFilterItems[]) {
+    this.refreshTableData(filterList.length ? filterList : []);
   }
 }

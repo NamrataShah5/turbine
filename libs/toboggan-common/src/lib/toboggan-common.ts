@@ -30,6 +30,7 @@ export interface IAssessment {
   discipline: string;
   unit: string;
   evaluatedBy: string;
+  similarity: number;
 }
 
 export type INewGroup = Omit<IGroup, 'id'>;

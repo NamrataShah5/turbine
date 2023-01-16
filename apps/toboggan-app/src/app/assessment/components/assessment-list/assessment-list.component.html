@@ -9,6 +9,7 @@
     [dataGenerator]="dataGenerator"
     [dynamic]="true"
     tableStyle="borders"
+    [filters]="filters"
     [getActionMenuItems]="getActionMenuItems"
     [isEmptyHead]="assessmentList.length === 0"
     noResultsLogo="gp-icon-moth"
@@ -16,7 +17,7 @@
     noResultsText="Thanks to your awesome evaluating skills, there’s nothing here to evaluate (for now). "
     (onRowAction)="onRowAction($event)"
     itemName="user assessments"
+    (onfilterItemClicked)="filterAssessmentList($event)"
   >
-    <ng-content select="[table-cta-right]" gp-table-cta-right></ng-content>
   </gp-table>
 </div>

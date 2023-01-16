@@ -11,6 +11,8 @@ import { BannerService } from '../../../shared/services/banner/banner.service';
 import { ModalAlertService } from '../../../shared/services/modal-alert/modal-alert.service';
 import {
   ITableDataGeneratorFactoryOutput,
+  ITableFilter,
+  ITableFilterItems,
   TableDataService
 } from '../../../shared/services/table-data/table-data.service';
 import { AssessmentService } from '../../services/assessment.service';
@@ -29,6 +31,7 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
   showAssessmentModal = false;
   editAssessmentData!: IAssessment;
   selectedOption!: RowActions;
+  filters: ITableFilter[] = [];
   private dataGeneratorFactoryOutputObserver: Observable<ITableDataGeneratorFactoryOutput> =
     {} as Observable<ITableDataGeneratorFactoryOutput>;
   private datageneratorSubscription: Subscription = {} as Subscription;
@@ -41,7 +44,7 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
     private router: Router,
     private modalAlertService: ModalAlertService,
     private bannerService: BannerService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.refreshTableData();
@@ -95,7 +98,7 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
         rowId: String(index + 1),
         actionIcon,
         cellData: {
-          time_left: timeLeftCellObject,  
+          time_left: timeLeftCellObject,
           uuid: cellData.uuid,
           learner: cellData.learner,
           learnerId: cellData.learnerId,
@@ -113,9 +116,9 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
   }
 
 
-  
 
-  private refreshTableData() {
+
+  private refreshTableData(filtersSelected: ITableFilterItems[] = []) {
     if (this.datageneratorSubscription.unsubscribe) {
       this.datageneratorSubscription.unsubscribe();
     }
@@ -131,8 +134,9 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
         this.itemsPerPage,
         prevCurrentPage,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        () => {},
-        []
+        () => { },
+        [],
+        filtersSelected
       );
     this.datageneratorSubscription =
       this.dataGeneratorFactoryOutputObserver.subscribe(
@@ -140,10 +144,11 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
           this.dataGenerator = dataGeneratorFactoryOutput.dataGenerator;
           this.assessmentList =
             dataGeneratorFactoryOutput.tableRows as TableRow[];
-              this.assessmentService.passAllPendingListCount(this.assessmentList.length);
+          if (this.assessmentList.length) this.setFilterOptions();
+          this.assessmentService.passAllPendingListCount(this.assessmentList.length);
           this.dataGenerator.searchString = prevSearchString;
         }
-      );  
+      );
   }
 
   onRowAction(event: IRowActionEvent) {
@@ -227,5 +232,14 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
         },
       ],
     });
+  }
+
+  setFilterOptions() {
+    if (!this.filters.length) {
+      this.filters = this.tableDataService.setFiltersInTable(this.assessmentList, this.dataGenerator);
+    }
+  }
+  filterAssessmentList(filterList: ITableFilterItems[]) {
+    this.refreshTableData(filterList.length ? filterList : []);
   }
 }

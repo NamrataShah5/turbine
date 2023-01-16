@@ -4,11 +4,12 @@
     [dynamic]="true"
     tableStyle="borders"
     [getActionMenuItems]="getActionMenuItems"
+    [filters]="filters"
     noResultsHeading="No evaluated assessments yet"
     noResultsText="Once you create one, it’ll show up here."
     rowActionIcon="gp-icon-auto-stories"
     itemName="user evaluated assessments"
+    (onfilterItemClicked)="filterAssessmentList($event)"
   >
-    <ng-content select="[table-cta-right]" gp-table-cta-right></ng-content>
   </gp-table>
 </div>

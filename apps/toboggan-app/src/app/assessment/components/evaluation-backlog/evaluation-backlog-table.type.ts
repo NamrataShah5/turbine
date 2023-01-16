@@ -30,6 +30,7 @@ export const evaluationBacklogTableHeader: TableColumnDisplayMetadatum[] = [
     parents: '',
     defaultSort: true,
     searchableField: true,
+    filterable: true,
     alignment: TableColumnAlignmentEnum.Left,
     dataType: TableColumnDataTypeEnum.TextNowrap,
   },
@@ -39,6 +40,7 @@ export const evaluationBacklogTableHeader: TableColumnDisplayMetadatum[] = [
     parents: '',
     defaultSort: true,
     searchableField: true,
+    filterable: true,
     alignment: TableColumnAlignmentEnum.Left,
     dataType: TableColumnDataTypeEnum.TextNowrap,
   },
@@ -59,7 +61,7 @@ export const evaluationBacklogTableHeader: TableColumnDisplayMetadatum[] = [
     searchableField: true,
     alignment: TableColumnAlignmentEnum.Left,
     dataType: TableColumnDataTypeEnum.TextNowrap,
-    
+
   },
   {
     title: 'Assigned To',
@@ -67,6 +69,7 @@ export const evaluationBacklogTableHeader: TableColumnDisplayMetadatum[] = [
     parents: '',
     defaultSort: true,
     searchableField: true,
+    filterable: true,
     alignment: TableColumnAlignmentEnum.Left,
     dataType: TableColumnDataTypeEnum.TextNowrap,
     sticky: true

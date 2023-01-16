@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import {
   Component, OnDestroy,
   OnInit
@@ -10,6 +11,8 @@ import { IAssessment } from '@toboggan-ws/toboggan-common';
 import { Observable, Subscription } from 'rxjs';
 import {
   ITableDataGeneratorFactoryOutput,
+  ITableFilter,
+  ITableFilterItems,
   TableDataService
 } from '../../../shared/services/table-data/table-data.service';
 import { AssessmentService } from '../../services/assessment.service';
@@ -24,6 +27,7 @@ export class MyEvaluationsListComponent implements OnInit, OnDestroy {
   assessmentList: TableRow[] = [];
   currentPage = 1;
   itemsPerPage = 10;
+  filters: ITableFilter[] = [];
 
   private dataGeneratorFactoryOutputObserver: Observable<ITableDataGeneratorFactoryOutput> =
     {} as Observable<ITableDataGeneratorFactoryOutput>;
@@ -79,7 +83,7 @@ export class MyEvaluationsListComponent implements OnInit, OnDestroy {
     return data as TableRow[];
   }
 
-  private refreshTableData() {
+  private refreshTableData(filtersSelected: ITableFilterItems[] = []) {
     if (this.datageneratorSubscription.unsubscribe) {
       this.datageneratorSubscription.unsubscribe();
     }
@@ -96,15 +100,25 @@ export class MyEvaluationsListComponent implements OnInit, OnDestroy {
         prevCurrentPage,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => { },
-        []
+        [],
+        filtersSelected
       );
     this.datageneratorSubscription =
       this.dataGeneratorFactoryOutputObserver.subscribe(
         (dataGeneratorFactoryOutput) => {
           this.dataGenerator = dataGeneratorFactoryOutput.dataGenerator;
           this.assessmentList = dataGeneratorFactoryOutput.tableRows as TableRow[];
+          if (this.assessmentList.length) this.setFilterOptions();
           this.dataGenerator.searchString = prevSearchString;
         }
       );
+  }
+  setFilterOptions() {
+    if (!this.filters.length) {
+      this.filters = this.tableDataService.setFiltersInTable(this.assessmentList, this.dataGenerator);
+    }
+  }
+  filterAssessmentList(filterList: ITableFilterItems[]) {
+    this.refreshTableData(filterList.length ? filterList : []);
   }
 }
