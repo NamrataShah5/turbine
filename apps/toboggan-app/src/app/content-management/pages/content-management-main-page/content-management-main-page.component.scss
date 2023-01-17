@@ -1,0 +1,24 @@
+.content-management-page {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  h4 {
+    padding: 5px 0;
+  }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+  }
+
+  .right-panel {
+    width: 40%;
+    min-width: 400px;
+    height: 100vh;
+  }
+}
+

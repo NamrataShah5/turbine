@@ -8,6 +8,7 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
 import { GroupsModule } from './modules/groups/groups.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { UsersModule } from './modules/users/users.module';
+import { ContentManagementModule } from './modules/content-management/content-management.module';
 
 @Module({
   imports: [
@@ -17,9 +18,10 @@ import { UsersModule } from './modules/users/users.module';
     PermissionsModule,
     AssessmentsModule,
     AuthenticationModule,
-    StaffProfileModule
+    StaffProfileModule,
+    ContentManagementModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

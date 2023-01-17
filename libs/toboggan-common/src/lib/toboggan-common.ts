@@ -83,3 +83,17 @@ export interface IStaffProfile {
   phoneNumber: string;
   inboxes: string;
 }
+
+export interface IPathwayNode {
+  label: string;
+  type: string;
+  data: IPathwayData;
+  children?: IPathwayNode[];
+}
+
+export interface IPathwayData {
+  name: string;
+  displayName?: string;
+  description?: string;
+  uuid?: string;
+}

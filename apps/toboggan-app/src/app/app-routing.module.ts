@@ -43,6 +43,18 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'content-management',
+    loadChildren: () =>
+      import('./content-management/content-management.module').then((m) => m.ContentManagementModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'content-management/:id',
+    loadChildren: () =>
+      import('./content-management/content-management.module').then((m) => m.ContentManagementModule),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'staff-profile/:id',
     loadChildren: () =>
       import('./staff-profile/staff-profile.module').then((m) => m.StaffProfileModule),

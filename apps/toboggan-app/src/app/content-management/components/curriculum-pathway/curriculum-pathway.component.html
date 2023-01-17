@@ -1,0 +1,30 @@
+<mat-tree [dataSource]="curriculumPathway" [treeControl]="treeControl" class="pathway-tree">
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+    <div class="node-name" [class.highlighted]="selectedNode === node.data.uuid">
+      <span>{{node.data.name}}</span>
+      <button type="button" (click)="addNode(node.type, node.data.uuid)" class="btn-add-node">
+        <i class="material-icons add-icon">add</i>
+      </button>
+    </div>
+  </mat-tree-node>
+  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+      <div class="mat-tree-node">
+        <button mat-icon-button matTreeNodeToggle
+                [attr.aria-label]="'Toggle ' + node.data.name" class="btn-chevron">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <div class="node-name" [class.highlighted]="selectedNode === node.data.uuid">
+          <span>{{node.data.name}}</span>
+          <button type="button" (click)="addNode(node.type, node.data.uuid)" class="btn-add-node">
+            <i class="material-icons add-icon">add</i>
+          </button>
+        </div>
+      </div>
+      <div [class.pathway-tree-invisible]="!treeControl.isExpanded(node)"
+          role="group">
+        <ng-container matTreeNodeOutlet></ng-container>
+    </div>
+  </mat-nested-tree-node>
+</mat-tree>

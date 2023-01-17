@@ -1,0 +1,88 @@
+@import 'material-icons/iconfont/material-icons.css';
+
+.pathway-tree-invisible {
+  display: none;
+}
+
+.pathway-tree ul,
+.pathway-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+/*
+ * This padding sets alignment of the nested nodes.
+ */
+.pathway-tree .mat-nested-tree-node div[role=group] {
+  padding-left: 40px;
+}
+
+/*
+ * Padding for leaf nodes.
+ * Leaf nodes need to have padding so as to align with other non-leaf nodes
+ * under the same parent.
+ */
+.pathway-tree div[role=group] > .mat-tree-node {
+  padding-left: 40px;
+}
+
+.btn-chevron {
+  display: flex;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+.node-name {
+  display: flex;
+  align-items: center;
+  padding: 5px 15px;
+  border: 1px solid #ccc;
+  margin: 5px 0;
+  justify-content: space-between;
+
+  span {
+    display: block;
+    width: 100px;
+    overflow: hidden;
+    width:250px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .btn-add-node  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    border: none;
+    background-color: transparent;
+    border-radius: 3px;
+    width: 30px;
+    height: 30px;
+    margin-left: 15px;
+  }
+
+  &:hover {
+    .btn-add-node  {
+      background-color: #ccc;
+
+      .material-icons.add-icon {
+        color: #000;
+      }
+    }
+  }
+
+  &.highlighted {
+    background-color: #0d6efd;
+    color: #fff;
+
+    .material-icons.add-icon {
+      color: #fff;
+    }
+  }
+}
