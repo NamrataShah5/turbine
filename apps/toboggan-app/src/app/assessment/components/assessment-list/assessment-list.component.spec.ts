@@ -26,8 +26,6 @@ describe('AssessmentListComponent with empty results ', () => {
       currentAttempt: 1,
       attempts: 3,
       instructor: 'Christopher Edwards',
-      similarity: 0.27,
-      similarityUrl: 'https://google.com',
       evaluated: false,
       flagged: true,
       assignedTo: 'Christopher Edwards'

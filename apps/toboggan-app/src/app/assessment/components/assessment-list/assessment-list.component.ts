@@ -129,13 +129,6 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
             ? 'gp-yellow-20'
             : '';
 
-      const similarityColor =
-        cellData.similarity < 0.27
-          ? 'gp-green-80'
-          : cellData.similarity >= 0.27 && cellData.similarity < 0.89
-            ? 'gp-yellow-80'
-            : 'gp-red-80';
-
       const attemptBorderCellClass =
         cellData.currentAttempt > cellData.attempts
           ? 'gp-table-x-cell-warning-border'
