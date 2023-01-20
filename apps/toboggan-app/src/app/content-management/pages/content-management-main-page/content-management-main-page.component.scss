@@ -1,24 +1,22 @@
-.content-management-page {
-  display: flex;
-  padding: 20px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+  .content-layout{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
 
-  h4 {
-    padding: 5px 0;
+  .content-tree{
+    width: 60%;
+  }
+
+  .selected-content{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
   }
 
   .loading {
     display: flex;
     justify-content: center;
   }
-
-  .right-panel {
-    width: 40%;
-    min-width: 400px;
-    height: 100vh;
-  }
-}
 

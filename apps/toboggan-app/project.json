@@ -25,7 +25,8 @@
         ],
         "styles": [
           "./node_modules/@snhuproduct/toboggan-ui-components-library/src/scss/styles.scss",
-          "apps/toboggan-app/src/styles.scss"
+          "apps/toboggan-app/src/styles.scss",
+          "./node_modules/video.js/dist/video-js.css"
         ],
         "scripts": []
       },

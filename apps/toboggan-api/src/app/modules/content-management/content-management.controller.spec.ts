@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ContentManagementController } from './content-management.controller';
-import { ContentManagementService } from './content-managment.service';
+import { ContentManagementService } from './content-management.service';
 
 const mockData = [
   {

@@ -16,12 +16,12 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "paths": {
+      "@jwttoken": ["libs/jwttoken"],
       "@toboggan-ws/toboggan-common": ["libs/toboggan-common/src/index.ts"],
       "@toboggan-ws/toboggan-constants": [
         "libs/toboggan-constants/src/index.ts"
       ],
-      "@utils" : ["apps/toboggan-api/src/app/utils"],
-      "@jwttoken": ["libs/jwttoken"]
+      "@utils": ["apps/toboggan-api/src/app/utils"]
     }
   },
   "exclude": ["node_modules", "tmp"]

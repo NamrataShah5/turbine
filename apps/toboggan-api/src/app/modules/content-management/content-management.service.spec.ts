@@ -25,10 +25,11 @@ describe('ContentManagementService', () => {
   });
 
   it('should getCurriculumPathway', (done) => {
+    const id = '0VPMohg8e7GWDWiIPMp2';
     jest.spyOn(http, 'get').mockImplementation(() => of(data as any));
-    expect(
-      service.getCurriculumPathway('0VPMohg8e7GWDWiIPMp2').subscribe((response) => {
-        expect(http.get).toBeCalledWith('/curriculum-pathway/1', {});
+    expect(      
+      service.getCurriculumPathway(id).subscribe((response) => {
+        expect(http.get).toBeCalledWith(`/curriculum-pathway/${id}?fetch_tree=true`);
         expect(response).toEqual(data);
         done();
       })

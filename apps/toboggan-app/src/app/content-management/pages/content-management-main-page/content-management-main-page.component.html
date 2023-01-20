@@ -1,13 +1,12 @@
 <gp-page [loggedin]="true" type="learner">
-  <div class="row pb-5 pb-md-8 g-5 g-md-8">
-    <div class="col-12 col-md-6">
-      <div class="gp-container-test p-8">
-        <div class="content">
-          <toboggan-ws-curriculum-pathway *ngIf="curriculumPathway; else loading" [curriculumPathway]="curriculumPathway"></toboggan-ws-curriculum-pathway>
-          <ng-template #loading class="loading">Loading the curriculum pathway tree...</ng-template>
-        </div>
-      </div>
+  <div class="content-layout">
+    <div class="content-tree">
+      <toboggan-ws-curriculum-pathway *ngIf="curriculumPathway; else loading"
+        [curriculumPathway]="curriculumPathway"></toboggan-ws-curriculum-pathway>
+      <ng-template #loading class="loading">Loading the curriculum pathway tree...</ng-template>
+    </div>
+    <div class="selected-content">
+      <toboggan-ws-content-preview-button *ngIf="selectedContentId"></toboggan-ws-content-preview-button>
     </div>
   </div>
 </gp-page>
-

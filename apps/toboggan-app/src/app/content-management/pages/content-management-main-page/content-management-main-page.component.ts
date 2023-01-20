@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IPathwayData, IPathwayNode } from '@toboggan-ws/toboggan-common';
 import { ContentManagmentService } from '../../services/content-managment.service';
+import { ContentSelectionService } from '../../services/content-selection.service';
 
 @Component({
   selector: 'toboggan-ws-content-management-main-page',
@@ -14,9 +15,14 @@ export class ContentManagementMainPageComponent implements OnInit {
   dataProps: string[];
   pathwayProps: string[];
 
+  get selectedContentId(){
+    return this.contentSelectionService.selectedContentId;
+  }
+
   constructor(
     private route: ActivatedRoute,
-    private contentManagementService: ContentManagmentService
+    private contentManagementService: ContentManagmentService,
+    private contentSelectionService: ContentSelectionService
   ) {
     this.id = '';
     this.pathwayProps = ['label', 'type', 'children'];
@@ -29,7 +35,7 @@ export class ContentManagementMainPageComponent implements OnInit {
             can click on and get redirected to a page where the url contains the id of the curriculum_pathway
             this id will be extracted from that url.
       */
-    this.id = this.route.snapshot.paramMap.get('id') || '0VPMohg8e7GWDWiIPMp2';
+    this.id = this.route.snapshot.paramMap.get('id') || 'Z8P9Z7rBijQk7YcHANCL';
     this.getCurriculumPathway();
   }
 

@@ -8,6 +8,7 @@ import { StoriesModule } from '@snhuproduct/toboggan-ui-components-library';
 import { SharedModule } from '../shared/shared.module';
 import { CurriculumPathwayComponent } from './components/curriculum-pathway/curriculum-pathway.component';
 import { ContentManagementMainPageComponent } from './pages/content-management-main-page/content-management-main-page.component';
+import { ContentPreviewButtonComponent } from './components/content-preview-button/content-preview-button.component';
 
 const contentManagementRoutes: Routes = [
   { path: '', component: ContentManagementMainPageComponent },
@@ -17,6 +18,7 @@ const contentManagementRoutes: Routes = [
   declarations: [
     ContentManagementMainPageComponent,
     CurriculumPathwayComponent,
+    ContentPreviewButtonComponent,
   ],
   imports: [
     CommonModule,

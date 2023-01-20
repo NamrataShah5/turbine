@@ -97,3 +97,8 @@ export interface IPathwayData {
   description?: string;
   uuid?: string;
 }
+
+export interface ISignedUrlResponse {
+  signed_url: string;
+  resource_type: string;
+}

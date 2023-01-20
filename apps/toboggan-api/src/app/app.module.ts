@@ -5,10 +5,11 @@ import { AppService } from './app.service';
 import { AssessmentsModule } from './modules/assessments/assessments.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
+import { ContentManagementModule } from './modules/content-management/content-management.module';
+import { ContentServingModule } from './modules/content-serving/content-serving.module';
 import { GroupsModule } from './modules/groups/groups.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { UsersModule } from './modules/users/users.module';
-import { ContentManagementModule } from './modules/content-management/content-management.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ContentManagementModule } from './modules/content-management/content-ma
     AuthenticationModule,
     StaffProfileModule,
     ContentManagementModule,
+    ContentServingModule
   ],
   controllers: [AppController],
   providers: [AppService],

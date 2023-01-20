@@ -60,6 +60,14 @@ const routes: Routes = [
       import('./staff-profile/staff-profile.module').then((m) => m.StaffProfileModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'content-serve',
+    loadChildren: () =>
+      import('./content-serve/content-serve.module').then(
+        (m) => m.ContentServeModule
+      ),
+    canActivate: [AuthGuard],
+  },
   // default page is user, change as we may see fit in the future
   { path: '**', redirectTo: '/user' },
 ];
