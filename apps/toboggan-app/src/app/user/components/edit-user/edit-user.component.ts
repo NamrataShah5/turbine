@@ -45,7 +45,7 @@ export class EditUserComponent implements OnChanges {
       Validators.required,
       Validators.pattern(ValidatorPattern.nameValidation),
     ]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.pattern(/\S+@\S+\.\S+/)]),
   });
 
   ngOnChanges({ user }: SimpleChanges): void {

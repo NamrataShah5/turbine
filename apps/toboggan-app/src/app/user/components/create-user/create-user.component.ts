@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   InterstitialLoaderType,
@@ -14,7 +14,7 @@ import { UserService } from '../../../shared/services/user/user.service';
   templateUrl: './create-user.component.html',
   styleUrls: ['./create-user.component.scss'],
 })
-export class CreateUserComponent {
+export class CreateUserComponent implements OnInit {
   @Input() modalHandle?: ModalComponent;
 
   failedToAddUser = false; //indicated wether error banner is shown
@@ -29,7 +29,7 @@ export class CreateUserComponent {
       Validators.required,
       Validators.pattern(ValidatorPattern.nameValidation),
     ]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.pattern(/\S+@\S+\.\S+/)]),
     userGroups: new FormArray([]),
   });
   userGroups!: IGroup[];
@@ -41,6 +41,10 @@ export class CreateUserComponent {
     this.groupService.fetchGroups().subscribe((response) => {
       this.userGroups = response;
     });
+  }
+
+  ngOnInit(): void {
+    this.modalHandle?.alertBanners.pop();
   }
 
   onCheckboxToggle(e: any) {

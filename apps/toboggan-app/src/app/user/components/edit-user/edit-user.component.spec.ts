@@ -47,7 +47,7 @@ describe('EditUserComponent', () => {
       const firstName = component.userForm.controls['firstName'];
       firstName.setValue('');
       expect(component.userForm.valid).toBeFalsy();
-      expect(firstName.errors).toEqual({required: true});
+      expect(firstName.errors).toEqual({ required: true });
 
       firstName.setValue('testName1')
       expect(component.userForm.valid).toBeFalsy();
@@ -61,7 +61,7 @@ describe('EditUserComponent', () => {
       const lasteName = component.userForm.controls['lastName'];
       lasteName.setValue('');
       expect(component.userForm.valid).toBeFalsy();
-      expect(lasteName.errors).toEqual({required: true});
+      expect(lasteName.errors).toEqual({ required: true });
 
       lasteName.setValue('testName1')
       expect(component.userForm.valid).toBeFalsy();
@@ -75,18 +75,18 @@ describe('EditUserComponent', () => {
       const email = component.userForm.controls['email'];
       email.setValue('');
       expect(component.userForm.valid).toBeFalsy();
-      expect(email.errors).toEqual({required: true});
+      expect(email.errors).toEqual({ required: true });
 
       email.setValue('testemail')
       expect(component.userForm.valid).toBeFalsy();
-      expect(email.hasError('email')).toBe(true)
+      expect(email.hasError('pattern')).toBe(true)
 
       email.setValue('testemail@yopmail.com')
       expect(email.valid).toBe(true);
     });
-   })
+  })
 
- 
+
 
   it('should populate the userForm and open the modal', () => {
     const spy = jest.spyOn(component.editModal, 'open')
@@ -117,11 +117,11 @@ describe('EditUserComponent', () => {
 
   it('should close the edit modal and reset the userForm', () => {
     const spy = jest.spyOn(component.userChange, 'emit');
-   component.reviewing = null ;
-   component.userForm.setValue(completedInputs);
-   component.editModalHidden();
-   expect(spy).toBeCalledTimes(1)
-   expect(component.userForm.valid).not.toBeTruthy();
+    component.reviewing = null;
+    component.userForm.setValue(completedInputs);
+    component.editModalHidden();
+    expect(spy).toBeCalledTimes(1)
+    expect(component.userForm.valid).not.toBeTruthy();
   })
 
   it('should not close the edit modal and should not reset the userForm', () => {
@@ -133,17 +133,17 @@ describe('EditUserComponent', () => {
     expect(component.userForm.controls.firstName.value).toBeTruthy();
     expect(component.userForm.controls.lastName.value).toBeTruthy();
     expect(component.userForm.controls.email.value).toBeTruthy();
-   })
+  })
 
 
-   describe('editModalAccept()', () => {
+  describe('editModalAccept()', () => {
     it('should open review modal if form is valid and any values changed', () => {
       const spyEditModal = jest.spyOn(component.editModal, 'close');
       const spyReviewModal = jest.spyOn(component.reviewModal, 'open');
       component.userForm.setValue(completedInputs);
       expect(component.userForm).not.toBeFalsy();
       // assign user a different value
-      component.user  = {
+      component.user = {
         "firstName": "Bobb",
         "lastName": "Jackson",
         "email": "BobJackson@test.com",
@@ -153,9 +153,9 @@ describe('EditUserComponent', () => {
       expect(component.reviewing).toMatchObject(formValue);
       expect(spyEditModal).toBeCalledTimes(1)
       expect(spyReviewModal).toBeCalledTimes(1)
-     })
+    })
 
-     it('should not work if the form is invalid', () => {
+    it('should not work if the form is invalid', () => {
       const spyEditModal = jest.spyOn(component.editModal, 'close');
       const spyReviewModal = jest.spyOn(component.reviewModal, 'open');
       expect(component.userForm.valid).toBeFalsy();
@@ -163,50 +163,50 @@ describe('EditUserComponent', () => {
       expect(component.reviewing).toBeFalsy();
       expect(spyEditModal).not.toBeCalled()
       expect(spyReviewModal).not.toBeCalled()
-     })
+    })
 
-     it('should not work if user values does not change', () => {
+    it('should not work if user values does not change', () => {
       const spyEditModal = jest.spyOn(component.editModal, 'close');
       const spyReviewModal = jest.spyOn(component.reviewModal, 'open');
       component.userForm.setValue(completedInputs);
       expect(component.userForm).not.toBeFalsy();
       // assign user same value
-      component.user  = completedInputs as any;
+      component.user = completedInputs as any;
       component.editModalAccept();
       expect(component.reviewing).toBeFalsy();
       expect(spyEditModal).not.toBeCalled()
       expect(spyReviewModal).not.toBeCalled()
-     })
-   })
+    })
+  })
 
-   it('should open edit modal again from review modal if reviewing value exist', () => {
+  it('should open edit modal again from review modal if reviewing value exist', () => {
     const spyEditModal = jest.spyOn(component.editModal, 'open');
     component.reviewing = completedInputs;
     component.reviewModalHidden();
     expect(component.reviewing).toBeNull();
     component.editModal.open();
     expect(spyEditModal).toBeCalled()
-   })
+  })
 
-   it('should not open edit modal again from review modal if reviewing value does not exist', () => {
+  it('should not open edit modal again from review modal if reviewing value does not exist', () => {
     const spyEditModal = jest.spyOn(component.editModal, 'open');
     component.reviewing = null;
     component.reviewModalHidden();
     expect(spyEditModal).not.toBeCalled()
-   })
+  })
 
-   describe('onSubmit()', () => {
-    let spyEventEmitter:any;
-    let spyReviewModal:any;
+  describe('onSubmit()', () => {
+    let spyEventEmitter: any;
+    let spyReviewModal: any;
     beforeEach(() => {
       spyEventEmitter = jest.spyOn(component.userChange, 'emit');
       spyReviewModal = jest.spyOn(component.reviewModal, 'close');
     });
-    it('should submit if user exist', async() => {
+    it('should submit if user exist', async () => {
       component.userForm.setValue(completedInputs);
-      component.user  = {
+      component.user = {
         "userType": "usertype",
-        "userId":"1"
+        "userId": "1"
       } as any;
       const spy = jest.spyOn(mockUserService, 'updateUser').mockImplementation(() => {
         return Promise.resolve();
@@ -215,13 +215,13 @@ describe('EditUserComponent', () => {
       expect(spy).toBeCalledTimes(1);
       expect(spyEventEmitter).toBeCalledTimes(1);
       expect(spyReviewModal).toBeCalledTimes(1);
-     })
+    })
 
-     it('should show success banner on successfull completion of update user', async () => {
+    it('should show success banner on successfull completion of update user', async () => {
       component.userForm.setValue(completedInputs);
-      component.user  = {
+      component.user = {
         "userType": "usertype",
-        "userId":"1"
+        "userId": "1"
       } as any;
       const spyUserService = jest.spyOn(mockUserService, 'updateUser').mockImplementation(() => {
         return Promise.resolve();
@@ -238,9 +238,9 @@ describe('EditUserComponent', () => {
 
     it('should show error banner on update user throws an error', async () => {
       component.userForm.setValue(completedInputs);
-      component.user  = {
+      component.user = {
         "userType": "usertype",
-        "userId":"1"
+        "userId": "1"
       } as any;
       const spyUserService = jest.spyOn(mockUserService, 'updateUser').mockImplementation(() => {
         return Promise.reject();
@@ -256,18 +256,18 @@ describe('EditUserComponent', () => {
     })
 
 
-  it('Should dismiss banner on call hideService', async () => {
-    component.userForm.setValue(completedInputs);
-    component.user  = {
-      "userType": "sampleType",
-      "userId":"1"
-    } as any;
-    const spy = jest.spyOn(bannerService, 'hideBanner');
-    await component.onSubmit();
-    bannerService.banners[0].button?.action(bannerService.banners[0].id);
-    expect(spy).toHaveBeenCalled();
-  });
-   })
+    it('Should dismiss banner on call hideService', async () => {
+      component.userForm.setValue(completedInputs);
+      component.user = {
+        "userType": "sampleType",
+        "userId": "1"
+      } as any;
+      const spy = jest.spyOn(bannerService, 'hideBanner');
+      await component.onSubmit();
+      bannerService.banners[0].button?.action(bannerService.banners[0].id);
+      expect(spy).toHaveBeenCalled();
+    });
+  })
 
 });
 

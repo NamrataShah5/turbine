@@ -6,17 +6,24 @@ import {
   Output,
   SimpleChanges,
   TemplateRef,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { ModalComponent as TobogganModalComponent } from '@snhuproduct/toboggan-ui-components-library';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ActivityMonitorService } from '../../auth/activity-monitor.service';
 @Component({
   selector: 'toboggan-ws-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnChanges {
-  constructor(public service: BsModalService) {}
+
+  constructor(public service: BsModalService, public activityMonitor: ActivityMonitorService) {
+    this.activityMonitor.subscribe(
+      'warning',
+      this.closeAllModals.bind(this)
+    );
+  }
   public modal?: BsModalRef;
   state = false;
   @Input() id!: string;
@@ -31,6 +38,12 @@ export class ModalComponent implements OnChanges {
   @Output() loaderCancel = new EventEmitter();
 
   @ViewChild('content') ref!: TemplateRef<HTMLElement>;
+
+  private closeAllModals() {
+    for (let i = 0; i <= this.service.getModalsCount(); i++) {
+      this.service.hide(i);
+    }
+  }
 
   open = async () => {
     this.modal = this.service.show(TobogganModalComponent, {

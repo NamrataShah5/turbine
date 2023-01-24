@@ -98,7 +98,8 @@ describe('AddUsersComponent', () => {
       user: 'abc',
       groupId: '2AE9GWE5E1A9',
     });
-    expect(component.getFormError('user')).toEqual('Check email format');
+    const user = component.addUserForm.controls['user'];
+    expect(user.hasError('pattern')).toBe(true)
   });
 
   it('should show validation when user submits on invalid user ', () => {

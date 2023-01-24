@@ -27,7 +27,7 @@ export class AddUsersComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() group!: IGroup;
   addUserForm: FormGroup = new FormGroup({
     groupId: new FormControl(''),
-    user: new FormControl('', [Validators.required, Validators.email]),
+    user: new FormControl('', [Validators.required, Validators.pattern(/\S+@\S+\.\S+/)]),
   });
   users: IUser[] = [];
   userEmails: string[] = [];
@@ -36,7 +36,7 @@ export class AddUsersComponent implements OnInit, OnChanges, AfterViewInit {
     private userService: UserService,
     private groupService: GroupService,
     private bannerService: BannerService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getUsers();
@@ -70,8 +70,8 @@ export class AddUsersComponent implements OnInit, OnChanges, AfterViewInit {
       if (this.addUserForm.valid) {
         const user = this.users.find(
           (user) => user.email == this.addUserForm.value.user
-        ) as IUser;      
-        if (user.userId) this.group = { ...this.group,members:[user.userId] }; // condition check added as there is users without userId.
+        ) as IUser;
+        if (user.userId) this.group = { ...this.group, members: [user.userId] }; // condition check added as there is users without userId.
 
         await this.groupService.updateGroup(this.group, this.group.uuid);
         // handle success
@@ -92,9 +92,9 @@ export class AddUsersComponent implements OnInit, OnChanges, AfterViewInit {
         message: `couldn't be completed: ${error}`,
       });
       return false;
-    }  
+    }
     return true;
-  } 
+  }
 
   hideModal() {
     this.adduserModal.close();

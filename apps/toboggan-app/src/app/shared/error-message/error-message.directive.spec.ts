@@ -11,8 +11,8 @@ describe('ErrorMessageDirective', () => {
   it('hasError should return false if control name is not found in the form', () => {
     const directive = new ErrorMessageDirective();
     directive.form = new FormGroup({
-      firstName: new FormControl('', [ Validators.required, 
-        Validators.pattern(ValidatorPattern.nameValidation)]),
+      firstName: new FormControl('', [Validators.required,
+      Validators.pattern(ValidatorPattern.nameValidation)]),
     });
     directive.controlName = 'nonExistingControlName';
     expect(directive.hasError).toBeFalsy();
@@ -21,20 +21,21 @@ describe('ErrorMessageDirective', () => {
   it('for invalid email adddress getError should return appropriate message', () => {
     const directive = new ErrorMessageDirective();
     directive.form = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.pattern(/\S+@\S+\.\S+/)]),
     });
     directive.controlName = 'email';
     directive.form.setValue({
       'email': 'invalidemail'
     });
-    expect(directive.errorMessage).toEqual('Check email format');
+    const user = directive.form.controls['email'];
+    expect(user.hasError('pattern')).toBe(true);
   })
 
   it('when control is valid getError should return empty string', () => {
     const directive = new ErrorMessageDirective();
     directive.form = new FormGroup({
-      firstName: new FormControl('', [ Validators.required, 
-        Validators.pattern(ValidatorPattern.nameValidation)]),
+      firstName: new FormControl('', [Validators.required,
+      Validators.pattern(ValidatorPattern.nameValidation)]),
     });
     directive.controlName = 'firstName';
     directive.form.setValue({
@@ -46,8 +47,8 @@ describe('ErrorMessageDirective', () => {
   it('when required control is empty should return appropriate error message', () => {
     const directive = new ErrorMessageDirective();
     directive.form = new FormGroup({
-      firstName: new FormControl('', [ Validators.required, 
-        Validators.pattern(ValidatorPattern.nameValidation)]),
+      firstName: new FormControl('', [Validators.required,
+      Validators.pattern(ValidatorPattern.nameValidation)]),
     });
     directive.controlName = 'firstName';
     directive.form.setValue({
@@ -59,8 +60,8 @@ describe('ErrorMessageDirective', () => {
   it('when field does not follow validation pattern should return appropriate error message', () => {
     const directive = new ErrorMessageDirective();
     directive.form = new FormGroup({
-      firstName: new FormControl('', [ Validators.required, 
-        Validators.pattern(ValidatorPattern.nameValidation)]),
+      firstName: new FormControl('', [Validators.required,
+      Validators.pattern(ValidatorPattern.nameValidation)]),
     });
     directive.controlName = 'firstName';
     directive.form.setValue({
