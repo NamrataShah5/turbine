@@ -13,16 +13,16 @@ export interface IGroup {
 export interface IAssessment {
   id: string;
   uuid: string;
-  learner: string;
+  learnerName: string;
   learnerId: string;
-  timeLeft: string;
+  timerStartTime: string;
   result: string | null;
   resultComment: string | null;
-  competency: string;
+  unitName: string;
   type: string;
-  attempts: number;
-  currentAttempt: number;
-  instructor: string;
+  attemptNo: number;
+  maxAttempts: number,
+  instructorName: string;
   comments: any;
   evaluated: boolean;
   flagged: boolean;

@@ -6,7 +6,10 @@ import {
   StoriesModule,
   TableDataGenerator
 } from '@snhuproduct/toboggan-ui-components-library';
+import { mock, MockProxy } from 'jest-mock-extended';
 import { of } from 'rxjs';
+import { ActivityMonitorService } from '../../../shared/auth/activity-monitor.service';
+import { AuthService } from '../../../shared/auth/auth.service';
 import { AssessmentService } from '../../services/assessment.service';
 
 import { AssessmentListComponent } from './assessment-list.component';
@@ -18,21 +21,22 @@ describe('AssessmentListComponent with empty results ', () => {
   const mockData = [
     {
       id: '1',
-      learner: 'Jessica',
+      learnerName: 'Jessica',
       result: null,
       resultComment: null,
-      competency: 'Analyze Written Works',
+      unitName: 'Analyze Written Works',
       type: 'Final',
-      currentAttempt: 1,
-      attempts: 3,
-      instructor: 'Christopher Edwards',
+      attemptNo: 1,
+      maxAttempts: 3,
+      instructorName: 'Christopher Edwards',
       evaluated: false,
       flagged: true,
       assignedTo: 'Christopher Edwards'
     },
   ];
+  const mockAuthService: MockProxy<AuthService> = mock<AuthService>();
   const mockAssessmentService = {
-    fetchAssessments: jest.fn().mockReturnValue(of(mockData)),
+    fetchAssessmentsById: jest.fn().mockReturnValue(of(mockData)),
   };
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -40,6 +44,8 @@ describe('AssessmentListComponent with empty results ', () => {
       declarations: [AssessmentListComponent],
       providers: [
         { provide: AssessmentService, useValue: mockAssessmentService },
+        { provide: AuthService, useValue: mockAuthService },
+        ActivityMonitorService,
         {
           provide: Router,
           useValue: {},
@@ -56,10 +62,10 @@ describe('AssessmentListComponent with empty results ', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call service for fetching assessments', () => {
+  it('should call service for fetching assessment by assessor id', () => {
     const fetchAssessments = jest.spyOn(
       mockAssessmentService,
-      'fetchAssessments'
+      'fetchAssessmentsById'
     );
     fixture.detectChanges();
     expect(fetchAssessments).toHaveBeenCalled();

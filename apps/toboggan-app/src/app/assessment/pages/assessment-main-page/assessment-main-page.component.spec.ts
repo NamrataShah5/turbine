@@ -4,19 +4,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { StoriesModule } from '@snhuproduct/toboggan-ui-components-library';
+import { mock, MockProxy } from 'jest-mock-extended';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { EMPTY, of } from 'rxjs';
+import { AuthService } from '../../../shared/auth/auth.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { AssessmentListComponent } from '../../components/assessment-list/assessment-list.component';
 import { AssessmentService } from '../../services/assessment.service';
 import { AssessmentMainPageComponent } from './assessment-main-page.component';
 
 const mockAssessmentService = {
-  fetchAssessments: jest.fn().mockReturnValue(of({})),
+  fetchAssessmentsById: jest.fn().mockReturnValue(of({})),
   allPendingListCount: EMPTY,
   myPendingListCount: EMPTY,
 
 };
+const mockAuthService: MockProxy<AuthService> = mock<AuthService>();
 
 describe('AssessmentMainPageComponent', () => {
   let component: AssessmentMainPageComponent;
@@ -32,6 +35,7 @@ describe('AssessmentMainPageComponent', () => {
       ],
       declarations: [AssessmentMainPageComponent, AssessmentListComponent],
       providers: [ { provide: AssessmentService, useValue: mockAssessmentService},
+        { provide: AuthService, useValue: mockAuthService },
         {
           provide: Router,
           useValue: {},

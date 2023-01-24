@@ -20,10 +20,10 @@ import { ISubmittedAssessment } from './assessments.types';
 export class AssessmentsController {
   constructor(private readonly assessmentsService: AssessmentsService) {}
 
-  // Update assessment
-  @Get('/')
-  getAssessments() {
-    return this.assessmentsService.getAssessments();
+  // get assessment by assessor_id : we are passing logged in user id as assessor id
+  @Get('/mypending/:uuid')
+  getAssessmentsById(@Param('uuid') uuid,) {
+    return this.assessmentsService.getAssessmentsById(uuid);
   }
 
 
@@ -32,9 +32,9 @@ export class AssessmentsController {
     return this.assessmentsService.getEvaluatedAssessments();
   }
 
-  @Get('evaluation-backlog')
+  @Get('/evaluation-backlog')
   getEvaluationBacklog() {
-    return this.assessmentsService.getEvaluationBacklogAssessments();
+    return this.assessmentsService.getEvaluationBacklog();
   }
 
   // update submitted assessment

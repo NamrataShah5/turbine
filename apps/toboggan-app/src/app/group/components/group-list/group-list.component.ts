@@ -172,8 +172,7 @@ export class GroupListComponent implements OnInit, OnDestroy {
       this.datageneratorSubscription.unsubscribe();
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [prevSearchString, prevCurrentPage] = [
-      this.dataGenerator.searchString || '',
+    const [prevCurrentPage] = [
       this.dataGenerator.currentPage || this.currentPage,
     ];
     this.dataGeneratorFactoryOutputObserver =

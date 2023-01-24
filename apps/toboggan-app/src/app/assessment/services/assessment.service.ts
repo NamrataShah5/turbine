@@ -20,10 +20,10 @@ export class AssessmentService {
     this.allPendingListCount.next(data);
   }
 
-  fetchAssessments() {
-    return this.http.get<IAssessment[]>('/api/assessments');
-  }
 
+  fetchAssessmentsById(assessor_id: string) {
+    return this.http.get<IAssessment[]>('/api/assessments/mypending/'+assessor_id);
+  }
   fetchEvaluatedAssessments() {
     return this.http.get<IAssessment[]>('/api/assessments/evaluated');
   }

@@ -147,7 +147,7 @@ describe('FlagAssessmentComponent', () => {
   });
 
   it('should show error banner on update user throws an error', async () => {
-    component.assessment = { id: '1', learner: 'sample' } as IAssessment;
+    component.assessment = { id: '1', learnerName: 'sample' } as IAssessment;
     component.editFlagModal = {
       modal: {
         content: {

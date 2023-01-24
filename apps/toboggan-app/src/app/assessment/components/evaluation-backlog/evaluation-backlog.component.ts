@@ -76,8 +76,13 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
   formatTableRowsWithAssessmentsData(fetchedData: unknown): TableRow[] {
     const assessments = fetchedData as IAssessment[];
     const data = assessments.map((cellData, index) => {
-      const dateDiffObj = getDateDiffObject(cellData.timeLeft, new Date());
+      const dateDiffObj = getDateDiffObject(cellData.timerStartTime, new Date());
       const timeLeftCellColor = getTimeleftColor(dateDiffObj);
+      const attemptBorderCellClass =
+      cellData.attemptNo > cellData.maxAttempts
+        ? 'gp-table-x-cell-warning-border'
+        : '';
+        
       const pausedTimeLeftCellObject = {
         value: 'Paused',
         cellType: 'icon-right',
@@ -100,13 +105,17 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
         cellData: {
           time_left: timeLeftCellObject,
           uuid: cellData.uuid,
-          learner: cellData.learner,
+          learnerName: cellData.learnerName,
           learnerId: cellData.learnerId,
           flagged: cellData.flagged,
-          competency: cellData.competency,
+          unitName: cellData.unitName,
           type: cellData.type,
-          attempt: [cellData.currentAttempt, cellData.attempts],
-          instructor: cellData.instructor,
+          attempt: {
+            0: cellData.attemptNo,
+            1: cellData.maxAttempts,
+            cellClass: attemptBorderCellClass,
+          },
+          instructorName: cellData.instructorName,
           assignedTo: cellData.assignedTo,
         },
       };
@@ -122,8 +131,7 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
     if (this.datageneratorSubscription.unsubscribe) {
       this.datageneratorSubscription.unsubscribe();
     }
-    const [prevSearchString, prevCurrentPage] = [
-      this.dataGenerator.searchString || '',
+    const [prevCurrentPage] = [
       this.dataGenerator.currentPage || this.currentPage,
     ];
     this.dataGeneratorFactoryOutputObserver =
@@ -146,7 +154,6 @@ export class EvaluationBacklogComponent implements OnInit, OnDestroy {
             dataGeneratorFactoryOutput.tableRows as TableRow[];
           if (this.assessmentList.length) this.setFilterOptions();
           this.assessmentService.passAllPendingListCount(this.assessmentList.length);
-          this.dataGenerator.searchString = prevSearchString;
         }
       );
   }

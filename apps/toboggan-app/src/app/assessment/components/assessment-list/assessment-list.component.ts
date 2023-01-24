@@ -12,6 +12,7 @@ import {
   IAssessment
 } from '@toboggan-ws/toboggan-common';
 import { Observable, Subscription } from 'rxjs';
+import { AuthService } from '../../../shared/auth/auth.service';
 import { BannerService } from '../../../shared/services/banner/banner.service';
 import { ModalAlertService } from '../../../shared/services/modal-alert/modal-alert.service';
 import {
@@ -49,7 +50,8 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     private tableDataService: TableDataService,
     private router: Router,
     private modalAlertService: ModalAlertService,
-    private bannerService: BannerService
+    private bannerService: BannerService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -119,7 +121,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
     const data = assessments.map((cellData, index) => {
       const actionIcon = cellData.flagged ? 'gp-icon-flag' : '';
       const className = cellData.flagged ? 'gp-table-x-bodyrow-diabled' : '';
-      const dateDiffObj = getDateDiffObject(cellData.timeLeft, new Date());
+      const dateDiffObj = getDateDiffObject(cellData.timerStartTime, new Date());
 
       const timeLeftCellColor =
         dateDiffObj.diff < THRESHOLD_OF_RED
@@ -130,7 +132,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
             : '';
 
       const attemptBorderCellClass =
-        cellData.currentAttempt > cellData.attempts
+        cellData.maxAttempts > cellData.attemptNo
           ? 'gp-table-x-cell-warning-border'
           : '';
 
@@ -148,7 +150,7 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
         cellClass: timeLeftCellColor,
       };
 
-      const timeLeftCellObject = cellData.flagged
+      const timeLeftCellObject:any = cellData.flagged
         ? pausedTimeLeftCellObject
         : defaultTimeLeftCellObject;
 
@@ -160,17 +162,17 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
           id: cellData.id,
           uuid: cellData.uuid,
           time_left: timeLeftCellObject,
-          learner: cellData.learner,
+          learnerName: cellData.learnerName,
           learnerId: cellData.learnerId,
-          competency: cellData.competency,
+          unitName: cellData.unitName,
           type: cellData.type,
           flagged: cellData.flagged,
           attempt: {
-            0: cellData.currentAttempt,
-            1: cellData.attempts,
+            0: cellData.attemptNo,
+            1: cellData.maxAttempts,
             cellClass: attemptBorderCellClass,
           },
-          instructor: cellData.instructor,
+          instructorName: cellData.instructorName,
           assignedTo: cellData.assignedTo,
         },
       };
@@ -184,14 +186,12 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
       this.datageneratorSubscription.unsubscribe();
     }
 
-    const [prevSearchString, prevCurrentPage] = [
-      this.dataGenerator.searchString || '',
+    const [prevCurrentPage] = [
       this.dataGenerator.currentPage || this.currentPage,
     ];
-
     this.dataGeneratorFactoryOutputObserver =
       this.tableDataService.dataGeneratorFactoryObs(
-        this.assessmentService.fetchAssessments(),
+        this.assessmentService.fetchAssessmentsById(this.authService?.currentUser?.uid),
         assessmentTableHeader,
         this.formatTableRowsWithAssessmentData,
         this.itemsPerPage,
@@ -210,7 +210,6 @@ export class AssessmentListComponent implements OnInit, OnDestroy {
             dataGeneratorFactoryOutput.tableRows as TableRow[];
           if (this.assessmentList.length) this.setFilterOptions();
           this.assessmentService.passmyPendingListCount(this.assessmentList.length);
-          this.dataGenerator.searchString = prevSearchString;
         }
       );
   }

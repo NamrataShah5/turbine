@@ -4,7 +4,7 @@ import {
   SingleHeaderRowTableDataGenerator,
   TableColumnDisplayMetadatum,
   TableDataGenerator,
-  TableRow,
+  TableRow
 } from '@snhuproduct/toboggan-ui-components-library';
 import { IGroup, IPermission } from '@toboggan-ws/toboggan-common';
 import * as R from 'ramda';
@@ -12,7 +12,7 @@ import { Observable, Subscription } from 'rxjs';
 import {
   ITableDataGeneratorFactoryOutput,
   ITableRowFilterFunc,
-  TableDataService,
+  TableDataService
 } from '../../../shared/services/table-data/table-data.service';
 import { PermissionService } from '../../services/permission.service';
 import { permissionTableHeader } from './permission-table-header';
@@ -218,8 +218,7 @@ export class PermissionsListComponent implements OnInit, OnDestroy {
     if (this.datageneratorSubscription.unsubscribe) {
       this.datageneratorSubscription.unsubscribe();
     }
-    const [prevSearchString, prevCurrentPage] = [
-      this.dataGenerator.searchString || '', //prevSearchString
+    const [prevCurrentPage] = [
       this.dataGenerator.currentPage || this.currentPage, //prevCurrentPage
     ];
     this.dataGeneratorFactoryOutputObserver =
@@ -238,7 +237,6 @@ export class PermissionsListComponent implements OnInit, OnDestroy {
         (dataGeneratorFactoryOutput) => {
           this.dataGenFactoryOutput = dataGeneratorFactoryOutput;
           this.dataGenerator = this.dataGenFactoryOutput.dataGenerator;
-          this.dataGenerator.searchString = prevSearchString;
         }
       );
   }

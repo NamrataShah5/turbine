@@ -12,15 +12,15 @@
   <p *ngIf="selectedOption === rowActions.FlagForInstructorReview">
     If you do, a link to this submission and your components will be emailed to
     the instructor,
-    <strong>{{ assessment.instructor }}</strong>
+    <strong>{{ assessment.instructorName }}</strong>
     , to review. This will also pause the evaluation timer.<br />
     Once you remove the flag, the timer will reset and you'll have 48 hours to
     evaluate this submission.
   </p>
 
   <p *ngIf="selectedOption === rowActions.ReturnUnEvaluated">
-    If you feel this submission isn't ready to be evaluated, you can sent it back to the learner,
-    <strong>{{ assessment.learner }}</strong>
+    If you feel this submission isn't ready to be evaluated, you can sent it back to the learnerName,
+    <strong>{{ assessment.learnerName }}</strong>
     , with comments on what to fix. They'll be asked to address the issue(s) you noted before they resubmit. <br>
     An unevaluated submission <em>doesn't</em> count as an attempt
   </p>

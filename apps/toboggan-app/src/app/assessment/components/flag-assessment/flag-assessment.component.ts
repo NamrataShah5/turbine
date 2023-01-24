@@ -4,7 +4,7 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InterstitialLoaderType } from '@snhuproduct/toboggan-ui-components-library';
@@ -15,7 +15,7 @@ import { ModalComponent } from '../../../shared/components/modal/modal.component
 import { BannerService } from '../../../shared/services/banner/banner.service';
 import {
   SubmittedAssessmentCommentType,
-  SubmittedAssessmentStatus,
+  SubmittedAssessmentStatus
 } from '../../interface/assessments.type';
 import { AssessmentService } from '../../services/assessment.service';
 import { RowActions } from '../assessment-list/assessment-table.type';
@@ -103,16 +103,16 @@ export class FlagAssessmentComponent implements AfterViewInit {
 
   get succesMessage() {
     if (this.selectedOption === RowActions.FlagForInstructorReview) {
-      return `<strong>${this.assessment?.learner}</strong>'s submission has been flagged for the instructor to review.`;
+      return `<strong>${this.assessment?.learnerName}</strong>'s submission has been flagged for the instructor to review.`;
     }
-    return `<strong>${this.assessment?.learner}</strong>'s submission was returned without bieng evaluated. It has been removed from your evaluation list`;
+    return `<strong>${this.assessment?.learnerName}</strong>'s submission was returned without bieng evaluated. It has been removed from your evaluation list`;
   }
 
   get errorMessage() {
     if (this.selectedOption === RowActions.FlagForInstructorReview) {
-      return `<strong>${this.assessment?.learner}</strong>'s couldn't be flagged.`;
+      return `<strong>${this.assessment?.learnerName}</strong>'s couldn't be flagged.`;
     }
-    return `<strong>${this.assessment?.learner}</strong>'s couldn't be returned as unevaluated.`;
+    return `<strong>${this.assessment?.learnerName}</strong>'s couldn't be returned as unevaluated.`;
   }
 
   get modalClassName() {

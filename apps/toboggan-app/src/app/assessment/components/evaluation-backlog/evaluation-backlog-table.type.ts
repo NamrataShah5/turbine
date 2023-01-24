@@ -18,7 +18,7 @@ export const evaluationBacklogTableHeader: TableColumnDisplayMetadatum[] = [
   },
   {
     title: 'Learner',
-    dataKey: 'learner',
+    dataKey: 'learnerName',
     parents: '',
     searchableField: true,
     alignment: TableColumnAlignmentEnum.Left,
@@ -26,7 +26,7 @@ export const evaluationBacklogTableHeader: TableColumnDisplayMetadatum[] = [
   },
   {
     title: 'Unit',
-    dataKey: 'competency',
+    dataKey: 'unitName',
     parents: '',
     defaultSort: true,
     searchableField: true,
@@ -55,7 +55,7 @@ export const evaluationBacklogTableHeader: TableColumnDisplayMetadatum[] = [
   },
   {
     title: 'Instructor',
-    dataKey: 'instructor',
+    dataKey: 'instructorName',
     parents: '',
     defaultSort: true,
     searchableField: true,

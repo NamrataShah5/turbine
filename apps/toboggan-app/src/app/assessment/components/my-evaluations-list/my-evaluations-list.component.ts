@@ -62,7 +62,7 @@ export class MyEvaluationsListComponent implements OnInit, OnDestroy {
       return {
         rowId: String(index + 1),
         cellData: {
-          learner: cellData.learner,
+          learnerName: cellData.learnerName,
           result: {
             cellType: cellData.resultComment ? 'tooltip' : null,
             cellTypeOptions: {
@@ -74,8 +74,8 @@ export class MyEvaluationsListComponent implements OnInit, OnDestroy {
           discipline: cellData.discipline,
           unit: cellData.unit,
           type: cellData.type,
-          attempt: [cellData.currentAttempt, cellData.attempts],
-          instructor: cellData.instructor,
+          attempt: [cellData.attemptNo, cellData.maxAttempts],
+          instructorName: cellData.instructorName,
         },
       };
     });
@@ -87,8 +87,7 @@ export class MyEvaluationsListComponent implements OnInit, OnDestroy {
     if (this.datageneratorSubscription.unsubscribe) {
       this.datageneratorSubscription.unsubscribe();
     }
-    const [prevSearchString, prevCurrentPage] = [
-      this.dataGenerator.searchString || '',
+    const [prevCurrentPage] = [
       this.dataGenerator.currentPage || this.currentPage,
     ];
     this.dataGeneratorFactoryOutputObserver =
@@ -109,7 +108,6 @@ export class MyEvaluationsListComponent implements OnInit, OnDestroy {
           this.dataGenerator = dataGeneratorFactoryOutput.dataGenerator;
           this.assessmentList = dataGeneratorFactoryOutput.tableRows as TableRow[];
           if (this.assessmentList.length) this.setFilterOptions();
-          this.dataGenerator.searchString = prevSearchString;
         }
       );
   }

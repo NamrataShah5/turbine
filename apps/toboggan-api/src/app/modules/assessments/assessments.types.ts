@@ -23,6 +23,7 @@ export interface IAssessment {
   last_modified_time: string;
   is_flagged: boolean;
   comments: any;
+  instructorName: string;
 }
 
 export enum AssessmentStatus {
