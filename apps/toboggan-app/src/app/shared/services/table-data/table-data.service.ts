@@ -77,7 +77,8 @@ export class TableDataService {
     currentPageNumer: number,
     updateFunc = () => { },
     additionalFilterFuncs: ITableRowFilterFunc[] = [],
-    filtersSelected: ITableFilterItems[] = []
+    filtersSelected: ITableFilterItems[] = [],
+    done = () => { },
   ): Observable<ITableDataGeneratorFactoryOutput> {
     return new Observable((observer) => {
       let rowsObservableSubscription: Subscription;
@@ -99,6 +100,9 @@ export class TableDataService {
             currentPage: number = currentPageNumer
           ) => {
             rowsObservableSubscription = rowsObservable.subscribe((rows) => {
+              if (rows) {
+                done();
+              }
               let pageNumber = currentPage; // for normal pagination
               if (!tableRefreshed) {
                 // if table refreshed

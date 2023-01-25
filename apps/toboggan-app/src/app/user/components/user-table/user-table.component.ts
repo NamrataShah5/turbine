@@ -65,15 +65,17 @@ export class UserTableComponent implements OnInit, OnDestroy {
       return isInvalid || filterStatusStr === rowUserStatus[1];
     },
   };
+  isLoading = false;
 
   constructor(
     private userService: UserService,
     private modalAlertService: ModalAlertService,
     private bannerService: BannerService,
     private tableDataService: TableDataService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+
     //the table should load with only active users visible (check userTableHeader). Filter is set to "Active" by default
     //hence the status filter is applied on-init
     userTableHeader.map((aColMetadatum: TableColumnDisplayMetadatum) => {
@@ -140,7 +142,7 @@ export class UserTableComponent implements OnInit, OnDestroy {
       firstName: first,
       lastName: last,
       email: mail[1],
-      userType : user?.userType
+      userType: user?.userType
     };
     switch (action) {
       case RowActions.Activate:
@@ -341,6 +343,7 @@ export class UserTableComponent implements OnInit, OnDestroy {
   private refreshTableData(
     additionalFilterFuncs: ITableRowFilterFunc[] = []
   ): void {
+    this.isLoading = true;
     // unsub if the subscription object is valid/there is an active subscription to prevent memory leak
     if (this.datageneratorSubscription.unsubscribe) {
       this.datageneratorSubscription.unsubscribe();
@@ -357,8 +360,12 @@ export class UserTableComponent implements OnInit, OnDestroy {
         this.formatTableRowsWithUserData,
         this.resultsPerPage,
         prevCurrentPage,
-        () => {},
-        additionalFilterFuncs
+        () => { },
+        additionalFilterFuncs,
+        [],
+        () => {
+          this.isLoading = false;
+        }
       );
     this.datageneratorSubscription =
       this.dataGeneratorFactoryOutputObserver.subscribe(
