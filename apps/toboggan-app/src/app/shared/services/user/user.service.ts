@@ -1,12 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  IGroup,
-  INewUser, IUser
-} from '@toboggan-ws/toboggan-common';
+import { IGroup, INewUser, IUser } from '@toboggan-ws/toboggan-common';
 import { BehaviorSubject, firstValueFrom, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +17,7 @@ export class UserService {
   private usersApi: any;
   protected ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private http: HttpClient) { }
-
-
+  constructor(private http: HttpClient) {}
 
   fetchUsers() {
     return this.http.get<IUser[]>(`/api/users`);
@@ -36,23 +30,34 @@ export class UserService {
   }
 
   async createUser(user: INewUser): Promise<unknown> {
-    return firstValueFrom(this.http.post('/api/users', user)
-      .pipe(takeUntil(this.ngUnsubscribe)));
+    return firstValueFrom(
+      this.http.post('/api/users', user).pipe(takeUntil(this.ngUnsubscribe))
+    );
   }
 
   async resetPassword(email: string): Promise<unknown> {
     return firstValueFrom(
-      this.http.post(`/api/authentication/passwordresetemail`, { email: email })
+      this.http.post(`/api/authentication/password-reset-email`, {
+        email: email,
+      })
     );
   }
 
   async updateUser(updatedUser: Partial<IUser>, userId: string): Promise<void> {
-    await firstValueFrom(this.http.put(`/api/users/${userId}`, updatedUser)
-      .pipe(takeUntil(this.ngUnsubscribe)));
+    await firstValueFrom(
+      this.http
+        .put(`/api/users/${userId}`, updatedUser)
+        .pipe(takeUntil(this.ngUnsubscribe))
+    );
   }
-  
-  async updateUserStatus(updatedUserStatus: Partial<IUser>, userId: string): Promise<void> {
-    await firstValueFrom(this.http.post(`/api/users/status/${userId}`, updatedUserStatus));
+
+  async updateUserStatus(
+    updatedUserStatus: Partial<IUser>,
+    userId: string
+  ): Promise<void> {
+    await firstValueFrom(
+      this.http.post(`/api/users/status/${userId}`, updatedUserStatus)
+    );
   }
   async patchUser(patchUser: Partial<IUser>, userId: string): Promise<void> {
     await firstValueFrom(this.http.patch(`/api/users/${userId}`, patchUser));

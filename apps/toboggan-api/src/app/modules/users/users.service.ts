@@ -1,14 +1,20 @@
+/* eslint-disable no-await-in-loop */
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { UserType } from '@toboggan-ws/toboggan-common';
-import { map } from 'rxjs';
+import { IUser, UserType } from '@toboggan-ws/toboggan-common';
+import { lastValueFrom, map } from 'rxjs';
+import { modelToCamelCase } from '../common/utils';
+import { GroupsService } from '../groups/groups.service';
 import { UpdateStatusDTO, UpdateUserDTO } from './users.dto';
 import { ICreateUser, UserStatus } from './users.types';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly groupService: GroupsService
+  ) {}
 
   getUsers(skip: number, limit: number, userType?: UserType) {
     const params = {
@@ -39,15 +45,11 @@ export class UsersService {
     return this.httpService.put(`/user/${id}`, user);
   }
 
-  updateStatus(id: string, updateStatus: UpdateStatusDTO) {
-    return this.httpService.post(`/user/${id}/change-status`, updateStatus);
-  }
-
   deleteUser(id: string) {
     return this.httpService.delete(`/user/${id}`);
   }
 
-  canLogin(email: string) {
+  isUserActive(email: string) {
     return this.searchUser(email).pipe(
       map((response) => {
         const user = response.data.data[0];
@@ -61,16 +63,73 @@ export class UsersService {
     );
   }
 
-  // resetPasswordOfUser(id: string) {
-  //   // forward the pwd-reset request to the back-end
-  //   // this does not do anything at the moment
-  //   this.users = this.users.map((user) => {
-  //     if (user.userId === id) {
-  //       return {
-  //         ...user,
-  //       };
-  //     }
-  //     return user;
-  //   });
-  // }
+  async updateStatus(id: string, updateStatus: UpdateStatusDTO) {
+    const response = await lastValueFrom(this.getUser(id));
+    const user = modelToCamelCase(response.data.data) as IUser;
+    const status = user.status as UserStatus;
+
+    switch (status) {
+      case UserStatus.Inactive: // activate user
+        throw new BadRequestException(
+          "Sorry, this behavior wasn't implemented yet."
+        );
+      case UserStatus.Active:
+        await this.deactivateUser(user, updateStatus);
+        break;
+    }
+
+    const updateUser = await lastValueFrom(
+      this.httpService.post(`/user/${id}/change-status`, updateStatus)
+    );
+
+    return updateUser;
+  }
+
+  private async deactivateUser(user: IUser, updateStatusDTO: UpdateStatusDTO) {
+    try {
+      const isUserAlreadyInactive = this.isUserAlreadyAtStatus(
+        user,
+        updateStatusDTO,
+        UserStatus.Inactive
+      );
+      if (isUserAlreadyInactive) {
+        throw new BadRequestException('Sorry, this user is already inactive.');
+      }
+
+      // given that the user was in a group, when the administrator deactivates their account, then the user's account is removed from that group
+
+      const userGroups = user.userGroups;
+
+      for (const groupUuid of userGroups) {
+        await lastValueFrom(
+          this.groupService.removeUsersFromGroup(groupUuid, [user.userId])
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  private activateUser(user: IUser, updateStatusDTO: UpdateStatusDTO) {
+    const isUserAlreadyActive = this.isUserAlreadyAtStatus(
+      user,
+      updateStatusDTO,
+      UserStatus.Active
+    );
+    if (isUserAlreadyActive) {
+      throw new BadRequestException('Sorry, this user is already active.');
+    }
+  }
+
+  private isUserAlreadyAtStatus(
+    user: IUser,
+    updateStatusDTO: UpdateStatusDTO,
+    status: UserStatus
+  ) {
+    if (user.status === status && updateStatusDTO.status === status) {
+      return true;
+    }
+
+    return false;
+  }
 }

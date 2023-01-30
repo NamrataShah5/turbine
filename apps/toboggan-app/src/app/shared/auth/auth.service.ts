@@ -215,7 +215,7 @@ export class AuthService {
     try {
       localStorage.setItem('IDP-Override', 'true');
       const data: any = await firstValueFrom(
-        this.http.post(`api/authentication/loginwithcreds`, {
+        this.http.post(`api/authentication/login-with-creds`, {
           email: email,
           password: password,
         })

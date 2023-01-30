@@ -8,8 +8,12 @@ describe('AuthenticationController', () => {
   let app: TestingModule;
   let service: AuthenticationService;
   const mockService = {
-    sendPasswordResetEmail: () => {""},
-    loginWithCredentials: (username,password) => {""}
+    sendPasswordResetEmail: () => {
+      ('');
+    },
+    loginWithCredentials: (username, password) => {
+      ('');
+    },
   };
   beforeAll(async () => {
     app = await Test.createTestingModule({
@@ -21,14 +25,12 @@ describe('AuthenticationController', () => {
         }),
       ],
       controllers: [AuthenticationController],
-      providers: [
-        AuthenticationService,
-      ],
+      providers: [AuthenticationService],
     })
       .overrideProvider(AuthenticationService)
       .useValue(mockService)
       .compile();
-      service = app.get<AuthenticationService>(AuthenticationService);
+    service = app.get<AuthenticationService>(AuthenticationService);
   });
   it('should be defined', () => {
     const controller = app.get<AuthenticationController>(
@@ -38,19 +40,21 @@ describe('AuthenticationController', () => {
   });
 
   describe('sendPasswordResetEmail', () => {
-    const mockQuery = {email: "somemail@email.com"};
+    const mockQuery = { email: 'somemail@email.com' };
     it('should throw error', async () => {
       const controller = app.get<AuthenticationController>(
         AuthenticationController
       );
-      await (expect(controller.sendPasswordResetEmail(mockQuery))).toBeUndefined();
-      expect(service.loginWithCredentials)
+      await expect(
+        controller.sendPasswordResetEmail(mockQuery)
+      ).toBeUndefined();
+      expect(service.loginWithCredentials);
     });
   });
 
-  describe('loginwithcreds', () => {
-    const mockQuery = {email: "somemail@email.com", password: 'test'};
-    const spy  = jest.spyOn(mockService,'loginWithCredentials')
+  describe('login-with-creds', () => {
+    const mockQuery = { email: 'somemail@email.com', password: 'test' };
+    const spy = jest.spyOn(mockService, 'loginWithCredentials');
     it('should throw error', async () => {
       const controller = app.get<AuthenticationController>(
         AuthenticationController

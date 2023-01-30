@@ -1,6 +1,7 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { environment } from '../../../environments/environment';
+import { GroupsService } from '../groups/groups.service';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -13,6 +14,6 @@ import { UsersService } from './users.service';
     }),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, GroupsService],
 })
-export class UsersModule { }
+export class UsersModule {}

@@ -67,8 +67,8 @@ export class UsersController {
 
   @Post('/status/:id')
   async updateStatus(@Param('id') id, @Body() body: UpdateStatusDTO) {
-    return this.usersService.updateStatus(id, {
-      status: body.status
+    return await this.usersService.updateStatus(id, {
+      status: body.status,
     });
   }
 
@@ -92,4 +92,3 @@ export class UsersController {
   //   }
   // }
 }
-

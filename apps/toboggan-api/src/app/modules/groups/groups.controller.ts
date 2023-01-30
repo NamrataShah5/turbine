@@ -9,10 +9,13 @@ import {
   Put,
   Query,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import {
-  CreateGroupDto, PatchGroupDto
+  AddGroupToUsersDTO,
+  CreateGroupDTO,
+  PatchGroupDTO,
+  RemoveGroupToUsersDTO,
 } from './groups.dto';
 
 import { HTTPHeaderAuthGuard } from '../auth/http-header-auth-guard.service';
@@ -39,25 +42,38 @@ export class GroupsController {
   }
 
   @Post('/')
-  createGroup(@Body() group: CreateGroupDto) {
+  createGroup(@Body() group: CreateGroupDTO) {
     return this.groupsService.createGroup(group);
   }
 
   @Put('/:uuid')
   updateGroup(
     @Param('uuid') uuid,
-    @Body() updatedGroup: Partial<CreateGroupDto>
+    @Body() updatedGroup: Partial<CreateGroupDTO>
   ) {
     return this.groupsService.updateGroup(uuid, updatedGroup);
   }
 
   @Patch('/:id')
-  patchGroup(@Param('id') id, @Body() updatedGroup: PatchGroupDto) {
+  patchGroup(@Param('id') id, @Body() updatedGroup: PatchGroupDTO) {
     return this.groupsService.patchGroup(id, updatedGroup);
   }
 
   @Delete('/:uuid')
   deleteGroup(@Param('uuid') uuid) {
     return this.groupsService.deleteGroup(uuid);
+  }
+
+  @Post('/:uuid/add-users')
+  addUsersToGroup(@Param('uuid') uuid, @Body() body: AddGroupToUsersDTO) {
+    return this.groupsService.addUsersToGroup(uuid, body.user_ids);
+  }
+
+  @Post('/:uuid/remove-users')
+  removeUsersFromGroup(
+    @Param('uuid') uuid,
+    @Body() body: RemoveGroupToUsersDTO
+  ) {
+    return this.groupsService.removeUsersFromGroup(uuid, body.user_ids);
   }
 }

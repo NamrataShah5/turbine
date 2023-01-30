@@ -1,6 +1,8 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { environment } from '../../../environments/environment';
+import { GroupsService } from '../groups/groups.service';
+import { UsersService } from '../users/users.service';
 import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
 
@@ -13,6 +15,6 @@ import { AuthenticationService } from './authentication.service';
     }),
   ],
   controllers: [AuthenticationController],
-  providers: [AuthenticationService],
+  providers: [AuthenticationService, UsersService, GroupsService],
 })
-export class AuthenticationModule { }
+export class AuthenticationModule {}

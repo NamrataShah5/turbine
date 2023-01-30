@@ -21,7 +21,7 @@ export interface IAssessment {
   unitName: string;
   type: string;
   attemptNo: number;
-  maxAttempts: number,
+  maxAttempts: number;
   instructorName: string;
   comments: any;
   evaluated: boolean;
@@ -43,7 +43,7 @@ export interface IUser {
   lastName?: string | null;
   email?: string | null;
   groups?: IGroup[];
-  userGroups?: IGroup[];
+  userGroups?: string[];
 }
 
 export type INewUser = Omit<IUser, 'userId'>;

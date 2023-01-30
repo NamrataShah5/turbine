@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreateGroupDto {
+export class CreateGroupDTO {
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -16,5 +16,13 @@ export class CreateGroupDto {
   permissions: string[];
 }
 
-export class PatchGroupDto extends PartialType(CreateGroupDto) {}
+export class PatchGroupDTO extends PartialType(CreateGroupDTO) {}
 
+export class AddGroupToUsersDTO {
+  // array of strings
+  @IsNotEmpty()
+  @IsString({ each: true })
+  user_ids: string[];
+}
+
+export class RemoveGroupToUsersDTO extends AddGroupToUsersDTO {}

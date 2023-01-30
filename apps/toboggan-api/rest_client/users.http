@@ -29,7 +29,7 @@ Authorization: Bearer {{authToken}}
 
 ## Users :: Get one user
 
-GET {{baseUrl}}/users/gpzG5fOFKgXhCPE1PseE HTTP/1.1
+GET {{baseUrl}}/users/lTysB2317AK6sA51kDLt HTTP/1.1
 Authorization: Bearer {{authToken}}
 
 
@@ -67,12 +67,12 @@ Content-Type: application/json
 ###
 
 # Users :: Update status
-PUT {{baseUrl}}/users/status/AFUNsdSdNqapM9owRYOr HTTP/1.1
+POST {{baseUrl}}/users/status/b9iHtkoye5G9xEyVxDSw HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "status": "active"
+  "status": "inactive"
 }
 
 ###

@@ -5,10 +5,7 @@ import * as arrayPaginate from 'array-paginate';
 import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  CreateGroupDto,
-  PatchGroupDto
-} from './groups.dto';
+import { CreateGroupDTO, PatchGroupDTO } from './groups.dto';
 
 @Injectable()
 export class GroupsService {
@@ -55,15 +52,15 @@ export class GroupsService {
     return paginatedGroups;
   }
 
-  createGroup(newGroup: CreateGroupDto): Observable<AxiosResponse<IGroup>> {
+  createGroup(newGroup: CreateGroupDTO): Observable<AxiosResponse<IGroup>> {
     return this.httpService.post('/group', newGroup);
   }
 
-  updateGroup(uuid: string, updatedGroup: Partial<CreateGroupDto>) {
+  updateGroup(uuid: string, updatedGroup: Partial<CreateGroupDTO>) {
     return this.httpService.put(`/group/${uuid}`, updatedGroup);
   }
 
-  patchGroup(id: string, updatedGroup: PatchGroupDto) {
+  patchGroup(id: string, updatedGroup: PatchGroupDTO) {
     this.groups = this.groups.map((group) => {
       if (group.uuid === id) {
         return {
@@ -77,5 +74,17 @@ export class GroupsService {
 
   deleteGroup(uuid: string) {
     return this.httpService.delete(`/group/${uuid}`);
+  }
+
+  removeUsersFromGroup(uuid: string, userIds: string[]) {
+    return this.httpService.post(`/group/${uuid}/remove-users`, {
+      user_ids: userIds,
+    });
+  }
+
+  addUsersToGroup(uuid: string, userIds: string[]) {
+    return this.httpService.post(`/group/${uuid}/add-users`, {
+      user_ids: userIds,
+    });
   }
 }
