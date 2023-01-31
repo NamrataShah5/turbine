@@ -85,28 +85,24 @@ export class UsersService {
     return updateUser;
   }
 
-  private async deactivateUser(user: IUser, updateStatusDTO: UpdateStatusDTO) {
-    try {
-      const isUserAlreadyInactive = this.isUserAlreadyAtStatus(
-        user,
-        updateStatusDTO,
-        UserStatus.Inactive
+  async deactivateUser(user: IUser, updateStatusDTO: UpdateStatusDTO) {
+    const isUserAlreadyInactive = this.isUserAlreadyAtStatus(
+      user,
+      updateStatusDTO,
+      UserStatus.Inactive
+    );
+    if (isUserAlreadyInactive) {
+      throw new BadRequestException('Sorry, this user is already inactive.');
+    }
+
+    // given that the user was in a group, when the administrator deactivates their account, then the user's account is removed from that group
+
+    const userGroups = user.userGroups;
+
+    for (const groupUuid of userGroups) {
+      await lastValueFrom(
+        this.groupService.removeUsersFromGroup(groupUuid, [user.userId])
       );
-      if (isUserAlreadyInactive) {
-        throw new BadRequestException('Sorry, this user is already inactive.');
-      }
-
-      // given that the user was in a group, when the administrator deactivates their account, then the user's account is removed from that group
-
-      const userGroups = user.userGroups;
-
-      for (const groupUuid of userGroups) {
-        await lastValueFrom(
-          this.groupService.removeUsersFromGroup(groupUuid, [user.userId])
-        );
-      }
-    } catch (error) {
-      console.error(error);
     }
   }
 
