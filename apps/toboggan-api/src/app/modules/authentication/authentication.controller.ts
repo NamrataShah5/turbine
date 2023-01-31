@@ -3,9 +3,11 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Post,
+  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -33,6 +35,12 @@ export class AuthenticationController {
       throw new HttpException('Invalid email', HttpStatus.BAD_REQUEST);
     }
     return this.authService.sendPasswordResetEmail(body.email);
+  }
+
+  @Get('/latest-session')
+  @UseGuards(HTTPHeaderAuthGuard)
+  getLatestSession(@Req() req) {
+    return this.authService.getLatestSession(req);
   }
 
   @Post('/login-with-creds')

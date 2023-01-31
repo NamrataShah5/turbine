@@ -1,6 +1,9 @@
 import { HttpModule } from '@nestjs/axios';
+import { CacheModule } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { environment } from '../../../environments/environment';
+import { GroupsService } from '../groups/groups.service';
+import { UsersService } from '../users/users.service';
 import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
 
@@ -14,6 +17,8 @@ describe('AuthenticationController', () => {
     loginWithCredentials: (username, password) => {
       ('');
     },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    getLatestSession: (request: any) => {},
   };
   beforeAll(async () => {
     app = await Test.createTestingModule({
@@ -23,9 +28,10 @@ describe('AuthenticationController', () => {
           timeout: 8000,
           maxRedirects: 3,
         }),
+        CacheModule.register(),
       ],
       controllers: [AuthenticationController],
-      providers: [AuthenticationService],
+      providers: [AuthenticationService, UsersService, GroupsService],
     })
       .overrideProvider(AuthenticationService)
       .useValue(mockService)
@@ -60,6 +66,17 @@ describe('AuthenticationController', () => {
         AuthenticationController
       );
       await controller.loginWithCredentials(mockQuery);
+      expect(spy).toBeCalled();
+    });
+  });
+
+  describe('latest-session', () => {
+    const spy = jest.spyOn(mockService, 'getLatestSession');
+    it('should get latest session', async () => {
+      const controller = app.get<AuthenticationController>(
+        AuthenticationController
+      );
+      await controller.getLatestSession({});
       expect(spy).toBeCalled();
     });
   });

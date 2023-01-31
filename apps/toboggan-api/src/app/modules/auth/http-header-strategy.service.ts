@@ -23,7 +23,7 @@ export class HTTPHeaderStrategy extends PassportStrategy(
   constructor(
     private httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthenticationService
   ) {
     super({
       header: 'Authorization',
@@ -33,7 +33,6 @@ export class HTTPHeaderStrategy extends PassportStrategy(
   }
 
   async validate(request: Request, token: string): Promise<unknown> {
-
     const jwtToken = new JWTToken(token);
     const authType = this.authenticationService.getAuthType(jwtToken);
 
@@ -69,35 +68,36 @@ export class HTTPHeaderStrategy extends PassportStrategy(
 
     // continue to acquire token if no token found in cache associated with user email
     console.log('acquiring fresh token ...');
-    const data = {
-      postBody: `id_token=${token}&providerId=${environment.identitytoolkit.providerID}`,
-      requestUri: `http://${request.headers['host']}`,
-      returnSecureToken: true,
-    };
 
-    const config = {
-      params: { key: environment.provider.apiKey },
+    const headers = {
+      Authorization: `Bearer ${jwtToken.jwtToken}`,
     };
 
     const newToken = await lastValueFrom(
-      this.httpService.post(environment.identitytoolkit.url, data, config).pipe(
-        catchError((err) => {
-          console.log(err.response.data.error);
-          throw new HttpException(
-            err.response.data.error.message,
-            err.response.data.error.code
-          );
-        })
-      )
+      this.httpService
+        .post(
+          `${environment.GPCoreBaseUrl}/authentication/api/v1/sign-in/token`,
+          {},
+          { headers }
+        )
+        .pipe(
+          catchError((err) => {
+            console.log(err.response.data.error);
+            throw new HttpException(
+              err.response.data.error.message,
+              err.response.data.error.code
+            );
+          })
+        )
     );
 
     if (environment.enableCache) {
       // cache token acquire for this user
-      await this.cacheManager.set(jwtToken.getEmailId(), newToken, {
+      await this.cacheManager.set(jwtToken.getEmailId(), newToken.data, {
         ttl: 600,
       });
     }
 
-    return newToken;
+    return newToken.data;
   }
 }

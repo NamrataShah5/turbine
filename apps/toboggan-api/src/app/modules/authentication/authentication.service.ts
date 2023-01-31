@@ -1,13 +1,23 @@
 import { JWTToken } from '@jwttoken';
 import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import { catchError, lastValueFrom } from 'rxjs';
 
 export type AuthType = 'FIREBASE_AUTH' | 'EMAIL_PW_AUTH';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
 
   getAuthType(jwtToken: JWTToken): AuthType {
     const decodedToken = jwtToken.decodeToken();
@@ -17,6 +27,20 @@ export class AuthenticationService {
     }
 
     return 'FIREBASE_AUTH';
+  }
+
+  async getLatestSession(request): Promise<{ sessionId } | HttpException> {
+    try {
+      const userEmail = request.user.data.email;
+      const userData = await this.cacheManager.get(userEmail);
+
+      return { sessionId: userData?.data?.session_id };
+    } catch (e) {
+      throw new HttpException(
+        'User session not found',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 
   sendPasswordResetEmail(email: string) {

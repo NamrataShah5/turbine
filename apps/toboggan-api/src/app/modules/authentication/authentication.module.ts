@@ -1,5 +1,5 @@
 import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { environment } from '../../../environments/environment';
 import { GroupsService } from '../groups/groups.service';
 import { UsersService } from '../users/users.service';
@@ -13,6 +13,7 @@ import { AuthenticationService } from './authentication.service';
       timeout: 8000,
       maxRedirects: 3,
     }),
+    CacheModule.register(),
   ],
   controllers: [AuthenticationController],
   providers: [AuthenticationService, UsersService, GroupsService],
