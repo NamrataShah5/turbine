@@ -16,4 +16,5 @@ export enum ValidatorPattern {
   // eslint-disable-next-line
   // letters, periods, hyphen s, spaces, and apostrophes, accented characters such as é, ö, û
   nameValidation = '^[A-Za-zÀ-ÖØ-öø-ÿ\\.\\- \']+$',
+  emailValidation = '^[A-Za-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
 }

@@ -21,7 +21,7 @@ describe('ErrorMessageDirective', () => {
   it('for invalid email adddress getError should return appropriate message', () => {
     const directive = new ErrorMessageDirective();
     directive.form = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.pattern(/\S+@\S+\.\S+/)]),
+      email: new FormControl('', [Validators.required, Validators.pattern(ValidatorPattern.emailValidation)]),
     });
     directive.controlName = 'email';
     directive.form.setValue({

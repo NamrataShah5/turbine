@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IGroup, IUser } from '@toboggan-ws/toboggan-common';
+import { ValidatorPattern } from '@toboggan-ws/toboggan-constants';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { BannerService } from '../../../shared/services/banner/banner.service';
 import { UserService } from '../../../shared/services/user/user.service';
@@ -27,7 +28,7 @@ export class AddUsersComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() group!: IGroup;
   addUserForm: FormGroup = new FormGroup({
     groupId: new FormControl(''),
-    user: new FormControl('', [Validators.required, Validators.pattern(/\S+@\S+\.\S+/)]),
+    user: new FormControl('', [Validators.required, Validators.pattern(ValidatorPattern.emailValidation)]),
   });
   users: IUser[] = [];
   userEmails: string[] = [];

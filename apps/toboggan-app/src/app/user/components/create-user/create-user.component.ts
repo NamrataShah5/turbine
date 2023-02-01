@@ -29,7 +29,7 @@ export class CreateUserComponent implements OnInit {
       Validators.required,
       Validators.pattern(ValidatorPattern.nameValidation),
     ]),
-    email: new FormControl('', [Validators.required, Validators.pattern(/\S+@\S+\.\S+/)]),
+    email: new FormControl('', [Validators.required, Validators.pattern(ValidatorPattern.emailValidation)]),
     userGroups: new FormArray([]),
   });
   userGroups!: IGroup[];
@@ -44,7 +44,9 @@ export class CreateUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.modalHandle?.alertBanners.pop();
+    if (this.modalHandle) {
+      this.modalHandle.alertBanners.splice(0, this.modalHandle.alertBanners.length);
+    }
   }
 
   onCheckboxToggle(e: any) {
