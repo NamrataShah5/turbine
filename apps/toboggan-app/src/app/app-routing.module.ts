@@ -68,6 +68,12 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'association-group',
+    loadChildren: () =>
+      import('./association-group/association-group.module').then((m) => m.AssociationGroupModule),
+    canActivate: [AuthGuard],
+  },
   // default page is user, change as we may see fit in the future
   { path: '**', redirectTo: '/user' },
 ];

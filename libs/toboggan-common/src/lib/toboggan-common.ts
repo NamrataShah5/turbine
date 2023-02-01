@@ -102,3 +102,41 @@ export interface ISignedUrlResponse {
   signed_url: string;
   resource_type: string;
 }
+
+export interface IAssociationGroup {
+  name: string;
+  description: string | null;
+  uuid: string;
+  members: string[];
+}
+
+export interface ILearner {
+  userType?: string | null;
+  status?: string;
+  userId: string;
+  userName: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+}
+
+export interface ICoach {
+  userType?: string | null;
+  status?: string;
+  userId: string;
+  userName: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+}
+
+export interface IInstructor {
+  userType?: string | null;
+  status?: string;
+  userId: string;
+  userName: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+  Discipline?: string | null;
+}

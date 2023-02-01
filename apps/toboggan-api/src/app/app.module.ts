@@ -3,6 +3,7 @@ import { StaffProfileModule } from '../staff-profile/staff-profile.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AssessmentsModule } from './modules/assessments/assessments.module';
+import { AssociationGroupModule } from './modules/association-group/association-group.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { ContentManagementModule } from './modules/content-management/content-management.module';
@@ -21,7 +22,8 @@ import { UsersModule } from './modules/users/users.module';
     AuthenticationModule,
     StaffProfileModule,
     ContentManagementModule,
-    ContentServingModule
+    ContentServingModule,
+    AssociationGroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

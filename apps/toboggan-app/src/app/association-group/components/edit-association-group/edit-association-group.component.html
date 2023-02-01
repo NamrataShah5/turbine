@@ -1,0 +1,49 @@
+<toboggan-ws-modal
+  #edit
+  title="Edit association group"
+  acceptButton="Save changes"
+  id="edit-group"
+  (hidden)="editModalHidden()"
+  (accept)="approveChanges()"
+>
+  <p>All fields are <b>required.</b></p>
+  <form [formGroup]="editGroupForm">
+    <label class="gp-label"> Association group type </label>
+    <p>Learner Group</p>
+
+    <gp-input
+      size="default"
+      label="Association group name"
+      [withIcon]="false"
+      [error]="hasError('name')"
+      [errorMessage]="getErrorMessage('name')"
+    >
+      <input
+        aria-label="input"
+        placeholder="placeholder"
+        type="text"
+        formControlName="name"
+      /> </gp-input
+    ><br />
+
+    <gp-text-area
+      size="default"
+      label="Association group description"
+      [error]="hasError('description')"
+      [errorMessage]="getErrorMessage('description')"
+    >
+      <textarea
+        aria-label="input"
+        placeholder="You might explain what makes this group unique, or why you're creating it"
+        formControlName="description"
+      ></textarea>
+    </gp-text-area>
+  </form>
+</toboggan-ws-modal>
+
+<div *ngIf="isLoading">
+  <gp-interstitial-loader
+    [isOverlayVisible]="true"
+    [type]="loaderType"
+  ></gp-interstitial-loader>
+</div>

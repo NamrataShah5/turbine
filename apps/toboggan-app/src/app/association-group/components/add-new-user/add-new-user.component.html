@@ -1,0 +1,58 @@
+<toboggan-ws-modal
+  #addUser
+  [title]="
+    type === 'user'
+      ? 'Add new users to group'
+      : 'Add new coach(es) to this group'
+  "
+  acceptButton="Add users"
+  cancelButton="Cancel"
+  id="add-user-group"
+  (hidden)="hideModal()"
+  (accept)="addUsertoGroup()"
+>
+  <p>
+    Search for users by first and last name or email address. Any user(s) you
+    add will be associated with
+    {{ group && group.name }}
+  </p>
+
+  <form [formGroup]="addUserForm" class="add-user-form">
+    <gp-select-input
+      label="User(s) to add"
+      id="user-select"
+      placeholder="---Not selected---"
+      size="default"
+      [error]="hasError('user')"
+      [errorMessage]="getFormError('user')"
+    >
+      <select class="form-control" formControlName="user" multiple="true">
+        <option *ngFor="let user of users" [value]="user.email">
+          {{ user.firstName }} {{ user.lastName }}
+        </option>
+      </select>
+    </gp-select-input>
+    <br />
+    <gp-input
+      label="Status"
+      size="default"
+      [errorMessage]="getFormError('status')"
+      [withIcon]="false"
+      iconId="gp-icon-edit"
+      [error]="hasError('status')"
+      [submitButton]="false"
+      [dark]="false"
+    >
+      <input
+        formControlName="status"
+        aria-label="input"
+        placeholder="placeholder"
+        [required]="false"
+        [typeahead]="status"
+        typeaheadOptionField="status"
+        [typeaheadMinLength]="1"
+        type="text"
+      />
+    </gp-input>
+  </form>
+</toboggan-ws-modal>

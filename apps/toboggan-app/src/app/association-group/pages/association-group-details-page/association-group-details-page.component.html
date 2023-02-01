@@ -1,0 +1,96 @@
+<gp-page [loggedin]="true" title="Application Admin">
+  <div class="p-5">
+    <toboggan-ws-edit-association-group
+      [group]="associationGroup"
+      *ngIf="showEditGroupModal"
+    ></toboggan-ws-edit-association-group>
+    <toboggan-ws-banner></toboggan-ws-banner>
+    <toboggan-ws-modal-alert></toboggan-ws-modal-alert>
+    <a
+      gp-link
+      iconId="gp-icon-west"
+      iconVariations="iconleft"
+      routerLink="/group"
+      >Back to Association Groups</a
+    >
+    <div class="gp-level-4 mt-6">
+      Association Group
+      <button
+        gp-button
+        size="default"
+        styleType="tertiary"
+        iconVariations="iconleft"
+        iconId="gp-icon-edit"
+        class="gp-edit-details"
+        (click)="editGroupDetails()"
+      >
+        Edit details
+      </button>
+    </div>
+    <div *ngIf="associationGroup">
+      <div class="gp-level-5">{{ associationGroup.name }}</div>
+      <div class="my-6">{{ associationGroup.description }}</div>
+    </div>
+    <gp-tabs>
+      <gp-tab label="Users">
+        <toboggan-ws-learner-list [group]="associationGroup">
+          <div table-cta-right>
+            <button
+              gp-button
+              class="add-user-group-btn"
+              (click)="openAddUserToGroupModal()"
+            >
+              Add users
+            </button>
+          </div>
+        </toboggan-ws-learner-list>
+      </gp-tab>
+      <gp-tab label="Purpose and associations">
+        <div class="row pb-5 pb-md-8 g-5 g-md-8">
+          <toboggan-ws-coach-list [group]="associationGroup">
+            <div table-cta-right>
+              <button
+                gp-button
+                class="add-user-group-btn"
+                (click)="openAddCoachesToGroupModal()"
+              >
+                Add coaches
+              </button>
+            </div>
+          </toboggan-ws-coach-list>
+          <toboggan-ws-instructor-list [group]="associationGroup">
+            <div table-cta-right>
+              <button
+                gp-button
+                class="add-user-group-btn"
+                (click)="openAddInstructorsToGroupModal()"
+              >
+                Add instructors
+              </button>
+            </div>
+          </toboggan-ws-instructor-list>
+        </div>
+      </gp-tab>
+    </gp-tabs>
+  </div>
+  <toboggan-ws-add-new-user
+    *ngIf="showAddUserModal"
+    (addUserToGroupAction)="handleAddUserToGroupAction()"
+    [group]="associationGroup"
+    [type]="'user'"
+  >
+  </toboggan-ws-add-new-user>
+  <toboggan-ws-add-new-user
+    *ngIf="showAddCoachModal"
+    (addCoachesToGroupAction)="handleAddCoachesToGroupAction()"
+    [group]="associationGroup"
+    [type]="'coach'"
+  >
+  </toboggan-ws-add-new-user>
+  <toboggan-ws-add-new-instructor
+    *ngIf="showAddInstructorModal"
+    (addUserToGroupAction)="handleAddUserToGroupAction()"
+    [group]="associationGroup"
+  >
+  </toboggan-ws-add-new-instructor>
+</gp-page>
