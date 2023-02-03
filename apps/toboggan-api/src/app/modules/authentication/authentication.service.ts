@@ -29,12 +29,12 @@ export class AuthenticationService {
     return 'FIREBASE_AUTH';
   }
 
-  async getLatestSession(request): Promise<{ sessionId } | HttpException> {
+  async getLatestSession(request): Promise<{ userSession } | HttpException> {
     try {
       const userEmail = request.user.data.email;
       const userData = await this.cacheManager.get(userEmail);
 
-      return { sessionId: userData?.data?.session_id };
+      return { userSession: userData?.data };
     } catch (e) {
       throw new HttpException(
         'User session not found',

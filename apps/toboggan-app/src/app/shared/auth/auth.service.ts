@@ -1,6 +1,6 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
@@ -105,11 +105,8 @@ export class AuthService {
       const credential = OAuthProvider.credentialFromResult(result);
       if (credential !== null) {
         const idToken = credential.idToken ?? '';
-        this.setSsoTokenJwt(idToken);
+        this.getLatestSession(idToken);
       }
-      localStorage.setItem('IDP-Override', 'false');
-
-      await this.router.navigate(['']);
     } catch (error) {
       console.error(error);
     }
@@ -229,4 +226,38 @@ export class AuthService {
       console.error(error);
     }
   };
+
+  getLatestSession = async (idToken: string) => {
+    try {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${idToken}`,
+      });
+      const data: any = await firstValueFrom(
+        this.http.get('/api/authentication/latest-session', {
+          headers: headers,
+        })
+      );
+      this.setSsoTokenJwt(data?.userSession?.idToken);
+      localStorage.setItem('IDP-Override', 'false');
+      localStorage.setItem(
+        'userSession',
+        JSON.stringify(data?.userSession, null, 2)
+      );
+
+      await this.router.navigate(['']);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getSessionId() {
+    const userSession = localStorage.getItem('userSession');
+    if (userSession) {
+      try {
+        return JSON.parse(userSession)?.session_id;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
 }
