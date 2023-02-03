@@ -10,6 +10,26 @@ gp-input:last-child {
 .gp-paragraph {
   margin-bottom: 32px;
 }
+
 .error-message {
   color: red;
+}
+
+.user-groups-heading {
+  display: flex;
+  align-items: center;
+
+  span {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 28px;
+    color: #08295A;
+  }
+
+  button,
+  button:hover,
+  button:focus:not(:focus-visible) {
+    border: none;
+  }
 }

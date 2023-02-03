@@ -18,7 +18,8 @@ describe('EditUserComponent', () => {
   const completedInputs = {
     "firstName": "Bob",
     "lastName": "Jackson",
-    "email": "BobJackson@test.com"
+    "email": "BobJackson@test.com",
+    "userGroups": []
   }
 
   beforeEach(async () => {
@@ -109,7 +110,8 @@ describe('EditUserComponent', () => {
     expect(component.userForm.value).toEqual({
       firstName: "",
       lastName: "",
-      email: ""
+      email: "",
+      userGroups: []
     });
     expect(spy).not.toBeCalled()
   })

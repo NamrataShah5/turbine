@@ -4,18 +4,36 @@
     <p class="gp-paragraph" *ngIf="user">
       {{ user.firstName }} {{ user.lastName }} (User ID: {{ user.userId }})
     </p>
-    <gp-input label="First name" toboggan-ws-error-message #firstNameErrMsg="tbWsErrMsg" [form]="userForm"
-      controlName="firstName" [error]="firstNameErrMsg.hasError" [errorMessage]="firstNameErrMsg.errorMessage">
+    <gp-input label="First name" toboggan-ws-error-message #firstNameErrMsg="tbWsErrMsg"
+      [error]="firstNameErrMsg.hasError" [errorMessage]="firstNameErrMsg.errorMessage">
       <input type="text" formControlName="firstName" />
     </gp-input>
-    <gp-input label="Last name" toboggan-ws-error-message #lastNameErrMsg="tbWsErrMsg" [form]="userForm"
-      controlName="lastName" [error]="lastNameErrMsg.hasError" [errorMessage]="lastNameErrMsg.errorMessage">
+    <gp-input label="Last name" toboggan-ws-error-message #lastNameErrMsg="tbWsErrMsg" [error]="lastNameErrMsg.hasError"
+      [errorMessage]="lastNameErrMsg.errorMessage">
       <input type="text" formControlName="lastName" />
     </gp-input>
-    <gp-input label="Email address" toboggan-ws-error-message #emailErrMsg="tbWsErrMsg" [form]="userForm"
-      controlName="email" [error]="emailErrMsg.hasError" [errorMessage]="emailErrMsg.errorMessage">
+    <gp-input label="Email address" toboggan-ws-error-message #emailErrMsg="tbWsErrMsg" [error]="emailErrMsg.hasError"
+      [errorMessage]="emailErrMsg.errorMessage">
       <input type="email" formControlName="email" />
     </gp-input>
+    <div class="mt-3"></div>
+
+    <div class="user-groups-heading">
+      <span>User Group(s)</span>
+      <button gp-button
+        gp-tooltip="This gives the user access to all permissions assigned to the selected user group(s). "
+        gp-tooltip-placement="bottom" iconId="gp-icon-info" styleType="tertiary" iconVariations="icononly"></button>
+    </div>
+    <gp-checkbox-group size="default" label="" orientation="vert" [hasSelectAll]="false" [required]="false">
+      <div class="row">
+        <div class="col-md-6" *ngFor="let data of userGroups">
+          <gp-checkbox [label]="data.name">
+            <input type="checkbox" [name]="data.name" [id]="data.uuid" [value]="data.uuid"
+              (change)="onCheckboxToggle($event)" [checked]="checkboxCheck(data.uuid)" />
+          </gp-checkbox>
+        </div>
+      </div>
+    </gp-checkbox-group>
   </form>
 </toboggan-ws-modal>
 
