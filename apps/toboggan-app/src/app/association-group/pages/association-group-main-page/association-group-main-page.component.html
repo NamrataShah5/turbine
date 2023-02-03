@@ -1,1 +1,23 @@
-<p>association-group-main-page works!</p>
+<gp-page [loggedin]="true">
+    <toboggan-ws-banner></toboggan-ws-banner>
+    <div class="gp-level-4 page-heading mb-5">Association groups</div>
+    <toboggan-ws-modal-alert></toboggan-ws-modal-alert>
+    <div class="group-list-container p-5">
+        <toboggan-ws-association-group-list>
+            <div table-cta-right>
+                <button
+                    gp-button
+                    class="create-group-btn"
+                    (click)="openCreateGroupModal()">
+                    Create association group
+                </button>
+            </div>
+        </toboggan-ws-association-group-list>
+    </div>
+    <ng-template #createGroup>
+        <toboggan-ws-create-association-group></toboggan-ws-create-association-group>>
+    </ng-template>
+    <toboggan-ws-create-association-group
+        *ngIf="showCreategroup"
+        (groupCreateAction)="handleGroupCreateAction()"></toboggan-ws-create-association-group>
+</gp-page>

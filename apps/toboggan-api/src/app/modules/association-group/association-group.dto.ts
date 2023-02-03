@@ -6,10 +6,15 @@ import { UserStatus } from '../users/users.types';
 export class CreateAssociationGroupDto {
   @IsString()
   @IsNotEmpty()
+  type: string;
+
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()
-  description: string | null;
+  @IsNotEmpty()
+  description;
 }
 
 export class PatchAssociationGroupDto extends PartialType(

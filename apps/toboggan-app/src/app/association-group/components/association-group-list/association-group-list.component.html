@@ -1,0 +1,17 @@
+<div class="table-container">
+  <toboggan-ws-edit-association-group
+    [oldGroup]="editGroupData"
+    *ngIf="showEditGroupModal"></toboggan-ws-edit-association-group>
+  <gp-table
+    [dataGenerator]="dataGenerator"
+    [dynamic]="true"
+    tableStyle="borders"
+    [getActionMenuItems]="getActionMenuItems"
+    noResultsHeading="No groups yet"
+    noResultsText="Once you create one, it’ll show up here."
+    (onRowAction)="onRowAction($event)"
+    itemName="associated groups"
+    minHeight="100px">
+    <ng-content select="[table-cta-right]" gp-table-cta-right></ng-content>
+  </gp-table>
+</div>

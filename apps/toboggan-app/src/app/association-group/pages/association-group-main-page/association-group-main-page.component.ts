@@ -1,15 +1,29 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { IAssociationGroup } from '@toboggan-ws/toboggan-common';
+
+export type associationGroupActionType = {
+  group: IAssociationGroup | undefined;
+  addUser: boolean;
+};
 
 @Component({
   selector: 'toboggan-ws-association-group-main-page',
   templateUrl: './association-group-main-page.component.html',
   styleUrls: ['./association-group-main-page.component.scss'],
 })
-export class AssociationGroupMainPageComponent implements OnInit {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+export class AssociationGroupMainPageComponent {
+  title = 'Create association group';
+  showCreategroup = false;
+
   constructor() {}
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  ngOnInit(): void {}
+  openCreateGroupModal() {
+    this.showCreategroup = true;
+  }
+
+  handleGroupCreateAction() {
+    this.showCreategroup = false;
+  }
+
 }

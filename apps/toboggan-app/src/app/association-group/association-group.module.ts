@@ -8,7 +8,9 @@ import { SharedModule } from '../shared/shared.module';
 import { associationGroupRouting } from './association-group.routing';
 import { AddNewInstructorComponent } from './components/add-new-instructor/add-new-instructor.component';
 import { AddNewUserComponent } from './components/add-new-user/add-new-user.component';
+import { AssociationGroupListComponent } from './components/association-group-list/association-group-list.component';
 import { CoachListComponent } from './components/coach-list/coach-list.component';
+import { CreateAssociationGroupComponent } from './components/create-association-group/create-association-group.component';
 import { EditAssociationGroupComponent } from './components/edit-association-group/edit-association-group.component';
 import { InstructorListComponent } from './components/instructor-list/instructor-list.component';
 import { LearnerListComponent } from './components/learner-list/learner-list.component';
@@ -25,6 +27,8 @@ import { AssociationGroupMainPageComponent } from './pages/association-group-mai
     CoachListComponent,
     AddNewUserComponent,
     AddNewInstructorComponent,
+    AssociationGroupListComponent,
+    CreateAssociationGroupComponent,  
   ],
   imports: [
     CommonModule,

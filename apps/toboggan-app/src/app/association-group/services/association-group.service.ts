@@ -4,7 +4,7 @@ import {
   IAssociationGroup,
   ICoach,
   IInstructor,
-  ILearner,
+  ILearner
 } from '@toboggan-ws/toboggan-common';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 
@@ -28,8 +28,8 @@ export class AssociationGroupService {
   }
 
   // Creates group
-  createAssociationGroup(group: Partial<IAssociationGroup>) {
-    return this.http.post('/api/association-group', group);
+  createAssociationGroup(group: Partial<IAssociationGroup>) : Promise<IAssociationGroup>{
+    return firstValueFrom(this.http.post<IAssociationGroup>('/api/association-group', group));
   }
 
   // Updates group

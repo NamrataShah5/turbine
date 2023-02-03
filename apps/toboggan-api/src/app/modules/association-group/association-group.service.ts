@@ -4,7 +4,7 @@ import {
   IAssociationGroup,
   ICoach,
   IInstructor,
-  ILearner,
+  ILearner
 } from '@toboggan-ws/toboggan-common';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -12,7 +12,7 @@ import {
   CreateCoachDto,
   CreateInstructorDto,
   CreateLearnerDto,
-  UpdateStatusDTO,
+  UpdateStatusDTO
 } from './association-group.dto';
 
 @Injectable()
@@ -27,7 +27,8 @@ export class AssociationGroupService {
     for (let i = 0; i < 10; i++) {
       this.associationGroups.push({
         uuid: uuidv4(),
-        name: `Learner Group 1`,
+        type:  Math.random() < 0.5 ? 'learner' : 'discipline',
+        name: `Association Group ${i}`,
         description: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. a consequat massa quis enim. Donec.`,
         members: [],
       });
@@ -75,9 +76,11 @@ export class AssociationGroupService {
   }
 
   createAssociationGroup(
-    newGroup: CreateAssociationGroupDto
+    newGroupDto: CreateAssociationGroupDto
   ): IAssociationGroup {
-    return this.associationGroup;
+      const newGroup = {uuid: uuidv4(), members:[], ...newGroupDto};
+      this.associationGroups.push(newGroup);
+      return newGroup;
   }
 
   updateAssociationGroup(
@@ -100,7 +103,7 @@ export class AssociationGroupService {
   // }
 
   deleteAssociationGroup(id: string) {
-    return;
+    this.associationGroups = this.associationGroups.filter(group => group.uuid !== id)
   }
 
   getInstructors(id: string): IInstructor[] {

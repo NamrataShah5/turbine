@@ -104,6 +104,7 @@ export interface ISignedUrlResponse {
 }
 
 export interface IAssociationGroup {
+  type: string;
   name: string;
   description: string | null;
   uuid: string;
